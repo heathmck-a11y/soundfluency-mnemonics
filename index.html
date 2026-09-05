@@ -1290,7 +1290,7 @@
       </div>
     </div>
 
-    <p class="adult-prompt">Ask: "What sound does this letter make?"<br>Tap the correct button below.</p>
+    <p id="adult-prompt" class="adult-prompt">Ask: "What picture?"<br>Tap the correct button below.</p>
 
     <div class="resp-btns">
       <button class="resp-btn resp-correct"  onclick="respond('correct')">correct</button>
@@ -1344,8 +1344,8 @@
     <div class="prompt-box">
       <img id="prompt-image" src="images/a.png" alt="a" style="width:75%;max-width:220px;object-fit:contain;margin-bottom:12px;">
       <p class="prompt-instruction">
-        This is <span id="prompt-sound" class="prompt-slash-letter">a</span>.<br>
-        <strong id="prompt-cta">What sound?</strong>
+        <span id="prompt-intro">This is</span> <span id="prompt-sound" class="prompt-slash-letter">apple</span>.<br>
+        <strong id="prompt-cta">What picture?</strong>
       </p>
       <button class="btn-confirm" id="prompt-done-btn" onclick="handlePromptDone()">Done - answer provided</button>
     </div>
@@ -1538,6 +1538,18 @@
 
     // Alphabetical order (used for grid display only)
     const LETTERS_ALPHA = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+    const MNEMONICS = {
+      a: 'apple',       b: 'bat and ball',  c: 'cat catching',
+      d: 'dog',         e: 'excited explorer', f: 'funny fish',
+      g: 'goofy glasses', h: 'high chair',  i: 'inchworm',
+      j: 'jumper',      k: 'kicker',        l: 'long legs',
+      m: 'mountain',    n: 'newt',          o: 'octopus',
+      p: 'plumbing pipe', q: 'queen',       r: 'railroad',
+      s: 'snake',       t: 'tall tower',    u: 'upside umbrella',
+      v: 'v-neck vest', w: 'waves',         x: '?',
+      y: 'yellow yarn', z: 'zig zag'
+    };
 
     const SESSION_SECS    = 2 * 60;  // default session length (overridden by duration picker)
     const SET_SIZE        = 6;       // letters per set
@@ -2937,6 +2949,16 @@
       cardEl.src = `images/${letter}.png`;
       cardEl.alt = letter;
 
+      // Update teacher prompt based on phase
+      const phase = (student.level || 1);
+      const mnemonic = MNEMONICS[letter] || letter;
+      const promptEl = document.getElementById('adult-prompt');
+      if (phase === 1) {
+        promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}</em></span>`;
+      } else {
+        promptEl.innerHTML = `Ask: <strong>"What sound?"</strong><br>Tap the correct button below.`;
+      }
+
       // Record when this card was shown (for sub-1-second detection)
       sess.cardShownAt = Date.now();
 
@@ -2956,7 +2978,9 @@
       clearIdleTimer();
       _idleTimer = setTimeout(() => {
         const letter = state.session.queue[state.session.cardIndex];
-        document.getElementById('prompt-sound').textContent = letter;
+        const phase = (currentStudent().level || 1);
+        const mnemonic = MNEMONICS[letter] || letter;
+        document.getElementById('prompt-sound').textContent = phase === 1 ? mnemonic : letter;
         document.getElementById('prompt-image').src = `images/${letter}.png`;
         document.getElementById('prompt-image').alt = letter;
         document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
@@ -2984,7 +3008,7 @@
       // Hide the overlay
       document.getElementById('prompt-overlay').classList.remove('visible');
       // Reset display to defaults
-      document.getElementById('prompt-cta').textContent = 'What sound?';
+      document.getElementById('prompt-cta').textContent = (currentStudent().level||1) === 1 ? 'What picture?' : 'What sound?';
       document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
       // Resume timer
       if (state.session && !state.session.timerInterval) startTimer();
