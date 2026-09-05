@@ -226,8 +226,7 @@
       100% { transform: scale(1); opacity: 1; }
     }
     .card-letter {
-      font-size: clamp(4.5rem, 20vw, 8rem);
-      font-family: 'Teachers', sans-serif; font-weight: 700; color: #1a1a2e; user-select: none; line-height: 1;
+      width: 85%; height: 85%; object-fit: contain; user-select: none;
     }
 
     /* Prompt */
@@ -1283,7 +1282,7 @@
     <!-- Flashcard -->
     <div class="card-stage">
       <div id="flashcard" class="flashcard">
-        <span id="card-letter" class="card-letter">a</span>
+        <img id="card-letter" class="card-letter" src="images/a.png" alt="a">
       </div>
     </div>
 
@@ -2910,13 +2909,8 @@
       void card.offsetWidth; // force reflow to restart animation
       card.classList.add('flip');
       const cardEl = document.getElementById('card-letter');
-      cardEl.textContent = letter;
-      // Some letters look better in Urbanist (straight k, etc.)
-      // Use Edu NSW for all others (good q tail, clean t, simple i, print a)
-      const urbanistLetters = new Set(['k']);
-      cardEl.style.fontFamily = urbanistLetters.has(letter)
-        ? "'Teachers', sans-serif"
-        : "'Teachers', sans-serif";
+      cardEl.src = `images/${letter}.png`;
+      cardEl.alt = letter;
 
       // Record when this card was shown (for sub-1-second detection)
       sess.cardShownAt = Date.now();
