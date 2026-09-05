@@ -1,0 +1,3382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Letter Sounds – Fluent Learning</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Teachers:wght@400;500;600;700;800&family=Patrick+Hand&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg:          #f0f4ff;
+      --bg:          #0f0f1a;
+      --surface:     #1a1a2e;
+      --surface2:    #232338;
+      --border:      #2e2e4a;
+      --text:        #f0f0ff;
+      --soft:        #9090b8;
+      --accent:      #9b5de5;
+      --accent-dk:   #7c3aed;
+      --accent2:     #c77dff;
+      --green:       #22c55e;
+      --green-dk:    #16a34a;
+      --green-bg:    #14291e;
+      --red:         #ef4444;
+      --red-dk:      #b91c1c;
+      --red-bg:      #2a1212;
+      --amber:       #f59e0b;
+      --amber-dk:    #d97706;
+      --amber-bg:    #2a1f00;
+      --gray:        #6060a0;
+      --gray-bg:     #1a1a2e;
+      --radius:      16px;
+      --shadow:      0 4px 24px rgba(155,93,229,.15);
+      --shadow-card: 0 8px 32px rgba(0,0,0,.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      font-family: 'Teachers', sans-serif;
+      background: #0f0f1a;
+      color: var(--text);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Only the .active screen is visible */
+    .screen {
+      display: none; flex-direction: column;
+      min-height: 100vh; padding: 24px 20px 48px;
+      max-width: 600px; margin: 0 auto;
+    }
+    .screen.active { display: flex; }
+
+    /* ── HOME ── */
+    .home-header {
+      text-align: center;
+      background: linear-gradient(160deg, #7c3aed 0%, #9b5de5 50%, #c77dff 100%);
+      margin: -24px -20px 28px;
+      padding: 48px 24px 40px;
+      border-radius: 0 0 32px 32px;
+    }
+    .app-logo    { line-height: 1; margin-bottom: 14px; }
+    .abc-logo-svg { width: 150px; height: auto; filter: drop-shadow(0 6px 20px rgba(0,0,0,.4)); display: block; margin: 0 auto; }
+    .app-title   { font-size: 2.4rem; font-weight: 900; color: #fff; letter-spacing: 1px; text-transform: uppercase; }
+    .app-tagline { font-size: .95rem; color: rgba(255,255,255,.75); font-weight: 600; margin-top: 4px; letter-spacing: .08em; }
+    .section-heading {
+      font-size: 1rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--soft); margin-bottom: 12px;
+    }
+    .add-row { display: flex; gap: 10px; margin-bottom: 16px; }
+    .add-row input {
+      flex: 1; padding: 14px 16px;
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 600;
+      color: var(--text); background: var(--surface); outline: none; transition: border-color .2s;
+    }
+    .add-row input:focus { border-color: var(--accent); }
+    .btn-add {
+      padding: 14px 20px; background: var(--accent); color: #fff;
+      border: none; border-radius: var(--radius);
+      font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 800;
+      cursor: pointer; white-space: nowrap; transition: background .2s, transform .1s;
+    }
+    .btn-add:hover  { background: var(--accent-dk); }
+    .btn-add:active { transform: scale(.96); }
+    .student-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+    .student-item {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #e2d9f3; border: 2px solid #cfc4ec;
+      border-radius: var(--radius); padding: 5px 16px;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15); transition: border-color .2s, box-shadow .2s; cursor: pointer;
+    }
+    .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(124,58,237,.2); }
+    .student-left  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
+    .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1a2e; }
+    .mini-pills    { display: flex; gap: 8px; flex-wrap: wrap; }
+    .pill { font-size: .75rem; font-weight: 800; padding: 3px 10px; border-radius: 100px; }
+    .pill.known    { background: #dcfce7; color: #166534; }
+    .pill.learning { background: #fef3c7; color: #92400e; }
+    .pill.unseen   { background: #f1f1f8;  color: #6060a0; }
+    .student-arrow { font-size: 1.3rem; color: var(--accent); margin-left: 8px; }
+    .btn-customize-inline {
+      background: none; border: none; color: #9090b8;
+      font-size: 1rem; cursor: pointer; padding: 4px 8px;
+      border-radius: 8px; transition: color .2s, background .2s;
+    }
+    .btn-customize-inline:hover { color: var(--accent); background: #f0eeff; }
+    .btn-delete {
+      background: none; border: none; color: #9090b8;
+      font-size: 1.1rem; cursor: pointer; padding: 4px 8px;
+      border-radius: 8px; transition: color .2s, background .2s; margin-left: 4px;
+    }
+    .btn-delete:hover { color: var(--red); background: #fff0f0; }
+    .empty-state { text-align: center; color: var(--soft); font-weight: 600; padding: 28px 0; }
+
+    /* ── DASHBOARD ── */
+    .dash-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 24px;
+      padding: 20px 20px 20px;
+      border-radius: 0 0 24px 24px;
+      flex-wrap: wrap;
+    }
+    .dash-topbar h2 { flex: 1; font-size: 1.4rem; font-weight: 900; color: #fff; }
+    .dash-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .dash-topbar .btn-back:hover { border-color: #fff; }
+    .points-section {
+      background: #1a1a2e;
+      border-radius: 16px;
+      padding: 14px 20px; margin-bottom: 22px;
+      box-shadow: 0 4px 24px rgba(0,0,0,.4);
+      border: 2px solid #2e2e4e;
+    }
+    .points-body {
+      display: flex; align-items: center; gap: 20px;
+    }
+    .points-row {
+      display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;
+    }
+    .points-label { font-size: .75rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
+    .points-value { font-size: 1.6rem; font-weight: 900; color: #c77dff; line-height: 1; }
+    .bar-track  { height: 12px; background: var(--border); border-radius: 100px; overflow: hidden; }
+    .bar-fill   {
+      height: 100%; border-radius: 100px;
+      background: linear-gradient(90deg, var(--accent), var(--green));
+      transition: width .5s ease;
+    }
+    .letter-status-card {
+      background: #3d3d6b; border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 20px;
+      border: 2px solid #4e4e80;
+    }
+    .grid-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8d8f0; margin-bottom: 10px; }
+    .letter-grid { display: flex; justify-content: space-between; gap: 0; margin-bottom: 14px; }
+    .grid-cell {
+      display: flex; flex-direction: column; align-items: center; gap: 5px;
+      cursor: default; padding: 2px 0;
+    }
+    .grid-cell .ltr { font-size: .82rem; font-weight: 600; color: #c8c8e8; }
+    .grid-cell .sdot {
+      width: 8px; height: 8px; border-radius: 50%;
+    }
+    .grid-cell.known    .sdot { background: var(--green); }
+    .grid-cell.learning .sdot { background: var(--amber); }
+    .grid-cell.unseen   .sdot { background: #4a4a80; }
+    .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .78rem; font-weight: 700; color: var(--soft); margin-bottom: 24px; }
+    .ldot { width: 11px; height: 11px; border-radius: 4px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+    .ldot.known    { background: var(--green); }
+    .ldot.learning { background: var(--amber); }
+    .ldot.unseen   { background: var(--gray); }
+    .reset-row { text-align: center; margin-top: 4px; }
+
+    /* ── SESSION SCREEN ── */
+    .session-topbar {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 14px; gap: 10px;
+    }
+
+    /* ── TIMER DISPLAY (big, centred, urgent when low) ── */
+    .timer-wrap {
+      display: flex; flex-direction: column; align-items: center; margin-bottom: 10px;
+    }
+    .timer-ring-wrap { position: relative; width: 96px; height: 96px; }
+    .timer-svg { width: 96px; height: 96px; transform: rotate(-90deg); }
+    .timer-track { fill: none; stroke: var(--border); stroke-width: 7; }
+    .timer-arc   {
+      fill: none; stroke: var(--accent); stroke-width: 7;
+      stroke-linecap: round;
+      /* circumference of r=41 circle ≈ 257.6 */
+      stroke-dasharray: 257.6;
+      stroke-dashoffset: 0;
+      transition: stroke-dashoffset .9s linear, stroke .4s;
+    }
+    .timer-arc.urgent { stroke: var(--red); }
+    .timer-text {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; font-weight: 900; color: var(--text);
+    }
+    .timer-text.urgent { color: var(--red); }
+    .timer-label { font-size: .75rem; font-weight: 800; color: var(--soft); margin-top: 5px; text-transform: uppercase; letter-spacing: .07em; }
+
+    /* Cards counter (shown below timer) */
+
+    /* Rolling-set dots */
+
+    /* Flashcard */
+    .card-stage {
+      flex: 1; display: flex; align-items: center; justify-content: center; padding: 8px 0;
+    }
+    .flashcard {
+      width: min(280px, 75vw); height: min(280px, 75vw);
+      background: #ffffff; border-radius: 28px;
+      box-shadow: 0 8px 40px rgba(0,0,0,.5); border: none;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .flashcard.flip { animation: flipAnim .3s ease; }
+    @keyframes flipAnim {
+      0%   { transform: scale(1); }
+      45%  { transform: scale(.86) rotateY(8deg); opacity: .5; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .card-letter {
+      font-size: clamp(4.5rem, 20vw, 8rem);
+      font-family: 'Teachers', sans-serif; font-weight: 700; color: #1a1a2e; user-select: none; line-height: 1;
+    }
+
+    /* Prompt */
+    .adult-prompt {
+      text-align: center; font-size: .85rem; color: var(--soft);
+      font-weight: 600; line-height: 1.5; margin-bottom: 16px;
+    }
+
+    /* ── RESPONSE BUTTONS ── */
+    .resp-btns {
+      display: flex; justify-content: center; align-items: center;
+      gap: 6px; margin-bottom: 10px;
+    }
+    .resp-btn {
+      background: var(--gray-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 100px;
+      padding: 6px 14px;
+      font-family: 'Teachers', sans-serif;
+      font-size: .78rem; font-weight: 700;
+      color: var(--soft); cursor: pointer;
+      transition: background .15s, color .15s, border-color .15s, transform .1s;
+      -webkit-tap-highlight-color: transparent;
+      white-space: nowrap;
+    }
+    .resp-btn:active       { transform: scale(.93); }
+    .resp-correct:hover    { background: var(--green-bg);  color: var(--green-dk); border-color: var(--green); }
+    .resp-wrong:hover      { background: var(--red-bg);    color: var(--red-dk);   border-color: var(--red); }
+    .resp-provided:hover   { background: var(--amber-bg);  color: var(--amber-dk); border-color: var(--amber); }
+    .resp-divider          { color: var(--border); font-size: .75rem; user-select: none; }
+    .resp-icon { display: none; }
+    .resp-lbl  { font-size: .78rem; }
+
+    /* ── RESULTS ── */
+    .results-wrap {
+      display: flex; flex-direction: column; align-items: center;
+      padding-top: 28px; gap: 14px;
+    }
+    #screen-results { background: #0f0f1a; }
+    .res-emoji { font-size: 3.8rem; line-height: 1; }
+    .res-title { font-size: 1.7rem; font-weight: 900; text-align: center; }
+    .res-name  { font-size: 1rem; font-weight: 700; color: var(--soft); }
+    .breakdown  { width: 100%; max-width: 400px; }
+    .bd-section { margin-bottom: 12px; }
+    .bd-title   { font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .07em; margin-bottom: 7px; }
+    .bd-title.c { color: var(--green-dk); }
+    .bd-title.w { color: var(--red-dk); }
+    .chips { display: flex; flex-wrap: wrap; gap: 7px; }
+    .chip   { padding: 5px 13px; border-radius: 100px; font-size: .95rem; font-weight: 900; }
+    .chip.c { background: var(--green-bg); color: var(--green-dk); }
+    .chip.w { background: var(--red-bg);   color: var(--red-dk); }
+    .res-actions { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; margin-top: 4px; }
+
+    /* ── SHARED BUTTONS ── */
+    .btn-primary {
+      padding: 15px 26px; background: var(--accent); color: #fff;
+      border: none; border-radius: var(--radius);
+      font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 800;
+      cursor: pointer; text-align: center; transition: background .2s, transform .1s; width: 100%;
+    }
+    .btn-primary:hover  { background: var(--accent-dk); }
+    .btn-primary:active { transform: scale(.96); }
+    .btn-secondary {
+      padding: 15px 26px; background: var(--surface); color: var(--accent);
+      border: 2px solid var(--accent); border-radius: var(--radius);
+      font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 800;
+      cursor: pointer; text-align: center; transition: background .2s; width: 100%;
+    }
+    .btn-secondary:hover { background: #eef2ff; }
+    .btn-back {
+      background: none; border: 2px solid var(--border); color: var(--soft);
+      padding: 10px 16px; border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; transition: border-color .2s, color .2s;
+    }
+    .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+
+    .btn-danger {
+      background: none; border: none; color: var(--gray);
+      padding: 6px 10px; border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .75rem; font-weight: 600;
+      cursor: pointer; transition: color .2s;
+      text-decoration: underline; text-decoration-style: dotted;
+    }
+    .btn-danger:hover { color: var(--red); }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 22px; left: 50%;
+      transform: translateX(-50%) translateY(60px);
+      padding: 12px 26px; border-radius: 100px;
+      font-weight: 800; font-size: .95rem; color: #fff;
+      z-index: 999; opacity: 0; pointer-events: none;
+      transition: transform .28s, opacity .28s;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+    .toast.green { background: var(--green); }
+    .toast.red   { background: var(--red); }
+
+    @media (max-width: 380px) {
+      .letter-grid { grid-template-columns: repeat(5,1fr); }
+    }
+    @media (min-width: 560px) {
+      .screen { padding: 36px 40px 64px; }
+    }
+
+
+    /* ── PROMPT OVERLAY (shown after 5s of no response) ── */
+    .prompt-overlay {
+      display: none; position: fixed; inset: 0; z-index: 100;
+      background: rgba(15, 23, 60, 0.78);
+      align-items: center; justify-content: center; padding: 28px 20px;
+    }
+    .prompt-overlay.visible { display: flex; }
+    .prompt-box {
+      background: #fff; border-radius: 24px;
+      padding: 28px 24px; max-width: 360px; width: 100%;
+      text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.4);
+    }
+    .prompt-letter {
+      font-size: 4.5rem; font-weight: 700; line-height: 1;
+      font-family: 'Teachers', sans-serif;
+      color: var(--text); margin-bottom: 14px;
+    }
+    .prompt-instruction {
+      font-size: .8rem; font-weight: 600; color: #6b21a8;
+      line-height: 1.6; margin-bottom: 12px; text-align: center;
+    }
+    .prompt-instruction strong { color: #6b21a8; font-weight: 700; font-size: .8rem; }
+    .prompt-slash-letter {
+      font-family: 'Teachers', sans-serif;
+      font-size: 7rem; font-weight: 700; color: #7c3aed;
+      display: block; line-height: 1; margin: 8px 0 16px;
+    }
+    .btn-confirm {
+      display: inline-block; padding: 14px 28px;
+      background: var(--accent); color: #fff; border: none;
+      border-radius: var(--radius); font-family: 'Teachers', sans-serif;
+      font-size: 1rem; font-weight: 700; cursor: pointer;
+      transition: background .2s, transform .1s;
+    }
+    .btn-confirm:hover  { background: var(--accent-dk); }
+    .btn-confirm:active { transform: scale(.96); }
+
+    /* ── Answer-provided chip colour ── */
+    .chip.p { background: var(--amber-bg); color: var(--amber-dk); }
+    .bd-title.p { color: var(--amber-dk); }
+
+
+    /* ── PAUSE BUTTON ── */
+    .btn-pause {
+      background: none; border: 2px solid var(--border); color: var(--soft);
+      padding: 8px 16px; border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 700;
+      cursor: pointer; transition: border-color .2s, color .2s;
+    }
+    .btn-pause:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── PAUSE OVERLAY ── */
+    .pause-overlay {
+      display: none; position: fixed; inset: 0; z-index: 200;
+      background: rgba(15, 23, 60, 0.88);
+      align-items: center; justify-content: center;
+    }
+    .pause-overlay.visible { display: flex; }
+    .pause-box {
+      background: #fff; border-radius: 24px;
+      padding: 40px 32px; max-width: 320px; width: 100%;
+      text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.3);
+    }
+    .pause-icon  { font-size: 3rem; line-height: 1; margin-bottom: 12px; }
+    .pause-title { font-size: 1.6rem; font-weight: 800; margin-bottom: 24px; }
+
+
+    /* ── DAILY STREAK ── */
+    .streak-section {
+      background: #3d3d6b; border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 20px;
+      border: 2px solid #4e4e80;
+    }
+    .streak-header {
+      display: flex; align-items: baseline; justify-content: space-between;
+      margin-bottom: 10px;
+    }
+    .streak-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8d8f0; }
+    .streak-count { font-size: 1.1rem; font-weight: 900; color: var(--accent); }
+    .streak-dots  { display: flex; gap: 6px; flex-wrap: wrap; }
+    .streak-dot {
+      width: 34px; height: 34px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .7rem; font-weight: 800; letter-spacing: 0;
+      border: 2px solid var(--border); background: #12122a; color: var(--gray);
+      transition: transform .15s;
+    }
+    .streak-dot.practiced   { background: var(--accent); border-color: var(--accent2); color: #fff; }
+    .streak-dot.today       { background: var(--green);  border-color: var(--green-dk);  color: #fff; transform: scale(1.12); }
+    .streak-dot.today-empty { border: 2px dashed var(--accent); color: var(--accent); background: #eef2ff; transform: scale(1.12); }
+    .streak-message { font-size: .85rem; font-weight: 600; color: var(--soft); margin-top: 10px; text-align: center; }
+    .streak-message strong { color: var(--text); }
+
+
+    /* ── POINTS CELEBRATION on results screen ── */
+    .points-celebration {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 6px; margin: 10px 0 22px;
+      background: radial-gradient(ellipse at center, rgba(155,93,229,.18) 0%, transparent 70%);
+      border-radius: 24px; padding: 18px 24px 22px;
+      position: relative; overflow: hidden;
+    }
+    .pts-earned-label {
+      font-size: .85rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--soft);
+    }
+    .pts-earned-number {
+      font-size: 8rem; font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, #c77dff, #22c55e);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      animation: popIn .55s cubic-bezier(.175,.885,.32,1.275) both;
+      filter: drop-shadow(0 0 18px rgba(155,93,229,.5));
+    }
+    .pts-earned-number.has-points {
+      animation: popIn .55s cubic-bezier(.175,.885,.32,1.275) both,
+                 ptsPulse 1.2s ease .6s 2;
+    }
+    @keyframes ptsPulse {
+      0%,100% { filter: drop-shadow(0 0 18px rgba(155,93,229,.5)); }
+      50%      { filter: drop-shadow(0 0 36px rgba(155,93,229,.9)); }
+    }
+    .pts-earned-unit {
+      font-size: 1.2rem; font-weight: 800; color: #c77dff;
+      margin-top: -6px;
+    }
+    .pts-total-row {
+      font-size: .85rem; font-weight: 700; color: var(--soft);
+      margin-top: 4px;
+    }
+    .pts-total-row strong { color: var(--accent); }
+    .pts-bar-wrap { display: none; }
+    @keyframes popIn {
+      0%   { transform: scale(0.3); opacity: 0; }
+      65%  { transform: scale(1.12); }
+      100% { transform: scale(1);   opacity: 1; }
+    }
+    .confetti-row {
+      font-size: 2.2rem; letter-spacing: .2em; margin-bottom: 4px;
+      animation: popIn .4s ease both;
+    }
+    /* Confetti particles */
+    .confetti-piece {
+      position: absolute; width: 8px; height: 8px; border-radius: 2px;
+      animation: confettiFall linear forwards;
+      pointer-events: none;
+    }
+    @keyframes confettiFall {
+      0%   { transform: translateY(-10px) rotate(0deg);   opacity: 1; }
+      100% { transform: translateY(160px) rotate(720deg); opacity: 0; }
+    }
+
+    .btn-finish {
+      display: block; width: 100%; margin-top: 10px;
+      padding: 13px 24px; background: none;
+      border: 2px solid var(--border); color: var(--soft);
+      border-radius: var(--radius); font-family: 'Teachers', sans-serif;
+      font-size: .95rem; font-weight: 700; cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-finish:hover { border-color: var(--accent); color: var(--accent); }
+
+
+    /* ── FA BUTTON in dashboard topbar ── */
+    .dash-topbar-btns { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+    .btn-fa-topbar {
+      padding: 10px 14px;
+      background: rgba(255,255,255,.15); border: 2px solid rgba(255,255,255,.3);
+      border-radius: var(--radius); color: #fff;
+      font-family: 'Teachers', sans-serif; font-size: .85rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap;
+      transition: background .2s, transform .1s;
+    }
+    .btn-fa-topbar:hover  { background: rgba(255,255,255,.25); }
+    .btn-fa-topbar:active { transform: scale(.96); }
+
+    /* ── FORMATIVE ASSESSMENT SCREEN ── */
+    .fa-topbar { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+    .fa-title  { font-size: 1.3rem; font-weight: 900; flex: 1; }
+    .fa-student-name { font-size: .95rem; font-weight: 700; color: var(--soft); margin-bottom: 18px; }
+
+    /* Tabs */
+    .fa-tabs {
+      display: flex; gap: 0; margin-bottom: 20px;
+      border-bottom: 2px solid var(--border);
+    }
+    .fa-tab {
+      flex: 1; padding: 10px 8px; background: none; border: none;
+      font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 700;
+      color: var(--soft); cursor: pointer; transition: color .2s;
+      border-bottom: 3px solid transparent; margin-bottom: -2px;
+    }
+    .fa-tab:hover { color: var(--accent); }
+    .fa-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+    /* Panels */
+    .fa-panel { display: none; }
+    .fa-panel.active { display: block; }
+
+    /* Placeholder content */
+    .fa-placeholder {
+      text-align: center; padding: 48px 24px;
+      color: var(--soft); font-size: 1rem; font-weight: 600; line-height: 1.6;
+    }
+    .fa-placeholder .fa-icon { font-size: 2.5rem; margin-bottom: 12px; }
+
+
+    /* ── FORMATIVE ASSESSMENT: RIGHT NOW TAB ── */
+    .fa-gradient-key {
+      display: flex; align-items: center; gap: 0;
+      border-radius: 8px; overflow: hidden;
+      height: 18px; margin-bottom: 6px;
+    }
+    .fa-gradient-key-swatch { flex: 1; height: 100%; }
+    .fa-gradient-labels {
+      display: flex; justify-content: space-between;
+      font-size: .65rem; font-weight: 700; color: var(--soft);
+      margin-bottom: 4px;
+    }
+    .fa-key-explanation {
+      font-size: .78rem; font-weight: 500; color: var(--soft);
+      line-height: 1.5; margin-bottom: 20px;
+      padding: 10px 12px; background: var(--gray-bg);
+      border-radius: 10px; border-left: 3px solid var(--border);
+    }
+    .fa-letters-grid {
+      display: grid; grid-template-columns: repeat(9, 1fr); gap: 5px;
+      margin-bottom: 16px;
+    }
+    .fa-letter-card {
+      width: 36px; height: 36px; border-radius: 7px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 900;
+      color: #fff; position: relative;
+      box-shadow: 0 1px 4px rgba(0,0,0,.12);
+      transition: transform .15s;
+      cursor: default; flex-shrink: 0;
+    }
+    .fa-letter-card.unseen {
+      background: var(--gray-bg) !important;
+      color: var(--gray); box-shadow: none;
+      border: 1.5px solid var(--border);
+    }
+    .fa-letter-card:hover { transform: scale(1.12); }
+    /* Tooltip-style day-count badge */
+    .fa-letter-card .fa-days {
+      position: absolute; bottom: 1px; right: 2px;
+      font-size: .38rem; font-weight: 800; opacity: .75;
+    }
+
+
+    /* ── FORMATIVE ASSESSMENT: HISTORY TAB ── */
+    .hist-letter-row {
+      display: flex; align-items: flex-start; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .hist-letter-row:last-child { border-bottom: none; }
+    .hist-letter-badge {
+      width: 34px; height: 34px; border-radius: 9px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.15rem; font-weight: 900;
+      background: var(--gray-bg); color: var(--text); border: 2px solid var(--border);
+    }
+    .hist-letter-badge.known { background: #166534; color: #fff; border-color: #166534; }
+    .hist-counts {
+      display: flex; gap: 10px; flex-shrink: 0; align-items: center; min-width: 70px;
+    }
+    .hist-count {
+      font-size: .8rem; font-weight: 800; display: flex; align-items: center; gap: 3px;
+    }
+    .hist-count.correct  { color: #16a34a; }
+    .hist-count.incorrect { color: #dc2626; }
+    .hist-dots { display: flex; flex-wrap: wrap; gap: 4px; align-items: center; flex: 1; }
+    .hist-dot {
+      width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0;
+    }
+    .hist-dot.correct   { background: #16a34a; }
+    .hist-dot.incorrect { background: #dc2626; }
+    .hist-dot.provided  { background: #ea580c; }
+    .hist-unseen {
+      font-size: .8rem; color: var(--soft); font-weight: 600;
+      font-style: italic; padding: 6px 0;
+    }
+
+
+    /* ── PIE CHART ── */
+    .pie-svg   { width: 88px; height: 88px; transform: rotate(-90deg); flex-shrink: 0; }
+    .res-pie-wrap {
+      display: flex; align-items: center; gap: 16px;
+      background: #6060a8; border-radius: 16px;
+      padding: 14px 22px; margin: 4px 0 16px;
+      border: 2px solid #7878c0; width: 100%; max-width: 320px;
+    }
+    .res-pie-svg { width: 72px; height: 72px; transform: rotate(-90deg); flex-shrink: 0; }
+    .res-pie-label { display: flex; flex-direction: column; gap: 2px; }
+    .res-pie-pct { font-size: 2rem; font-weight: 900; color: #c77dff; line-height: 1; }
+    .res-pie-sub { font-size: .75rem; font-weight: 700; color: var(--soft); text-transform: uppercase; letter-spacing: .06em; }
+
+    .points-sub { font-size: .75rem; font-weight: 600; color: var(--soft); }
+
+
+    /* ── BEGIN PRACTICE button ── */
+    @keyframes beginPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,255,255,.2); transform: scale(1); }
+      50%       { box-shadow: 0 0 0 6px rgba(255,255,255,.07); transform: scale(1.02); }
+    }
+    .btn-begin {
+      padding: 13px 22px;
+      background: linear-gradient(135deg, rgba(255,255,255,.25), rgba(255,255,255,.15));
+      color: #fff; border: 2px solid rgba(255,255,255,.4); border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif;
+      font-size: 1rem; font-weight: 800; letter-spacing: .05em; text-transform: uppercase;
+      cursor: pointer; white-space: nowrap;
+      backdrop-filter: blur(4px);
+      transition: background .2s, transform .1s;
+      animation: beginPulse 2s ease-in-out infinite;
+    }
+    .btn-begin:hover  { background: rgba(255,255,255,.3); animation: none; transform: scale(1.04); }
+    .btn-begin:active { transform: scale(.96); animation: none; }
+
+
+    /* ── Flashy goal display ── */
+    .points-goal {
+      font-size: 2.4rem; font-weight: 900; line-height: 1;
+      background: linear-gradient(135deg, #c77dff, #fbbf24);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -1px;
+    }
+    .points-goal-pts {
+      font-size: 1.1rem; font-weight: 800; letter-spacing: 0;
+    }
+    .points-goal-sub {
+      font-size: .72rem; font-weight: 700; color: var(--soft);
+      margin-top: 2px;
+    }
+
+
+    .pie-pts-big {
+      font-size: 2.8rem; font-weight: 700; color: #9090b8;
+      line-height: 1; letter-spacing: -1px;
+    }
+
+    /* ── FA set grouping ── */
+    .fa-set-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 10px;
+    }
+    .fa-set-label {
+      font-size: .65rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--soft); white-space: nowrap; width: 32px;
+    }
+    .hist-set-section { margin-bottom: 18px; }
+    .hist-set-label {
+      font-size: .7rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--accent); margin-bottom: 6px;
+      padding-bottom: 4px; border-bottom: 1px solid var(--border);
+    }
+
+
+    /* ── DURATION PICKER OVERLAY ── */
+    .duration-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.75);
+      align-items: center; justify-content: center;
+    }
+    .duration-overlay.visible { display: flex; }
+    .duration-box {
+      background: #1a1a2e; border-radius: 24px;
+      padding: 32px 28px; max-width: 300px; width: 90%;
+      text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.5);
+      border: 2px solid #2e2e4a;
+    }
+    .duration-title {
+      font-size: 1.2rem; font-weight: 900; color: #f0f0ff;
+      margin-bottom: 22px; text-transform: uppercase; letter-spacing: .08em;
+    }
+    .duration-btns { display: flex; gap: 8px; justify-content: center; margin-bottom: 18px; }
+    .btn-duration {
+      flex: 1; padding: 18px 8px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      border: none; border-radius: 16px;
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      cursor: pointer; transition: opacity .2s, transform .1s;
+      box-shadow: 0 4px 14px rgba(124,58,237,.4);
+    }
+    .btn-duration:hover  { opacity: .88; }
+    .btn-duration:active { transform: scale(.94); }
+    .dur-num  { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; }
+    .dur-unit { font-size: .75rem; font-weight: 700; color: rgba(255,255,255,.75); text-transform: uppercase; letter-spacing: .08em; }
+    .btn-dur-cancel {
+      background: none; border: none; color: var(--soft);
+      font-family: 'Teachers', sans-serif; font-size: .85rem;
+      font-weight: 700; cursor: pointer; padding: 6px 12px;
+      transition: color .2s;
+    }
+    .btn-dur-cancel:hover { color: #f0f0ff; }
+
+
+    .btn-print {
+      padding: 9px 16px; background: var(--surface2);
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .85rem; font-weight: 700;
+      color: var(--soft); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-print:hover { border-color: var(--accent); color: var(--accent); }
+
+
+    /* ── PRINT STYLES ── */
+    @media print {
+      body > *:not(#print-container) { display: none !important; }
+      #print-container { display: block !important; }
+    }
+    #print-container { display: none; }
+
+
+    /* ── TEACHER NOTES ── */
+    .notes-section {
+      background: var(--surface2); border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 20px;
+      border: 2px solid var(--border);
+    }
+    .notes-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .notes-label {
+      font-size: .8rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: #d8d8f0;
+    }
+    .btn-notes-save {
+      padding: 6px 14px; background: var(--accent);
+      border: none; border-radius: 8px;
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 800;
+      color: #fff; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-notes-save:hover { opacity: .85; }
+    .notes-input {
+      width: 100%; background: #12122a; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 500;
+      color: var(--text); resize: none; outline: none;
+      transition: border-color .2s; line-height: 1.5;
+    }
+    .notes-input::placeholder { color: var(--soft); }
+    .notes-input:focus { border-color: var(--accent); }
+
+    /* Log of saved notes */
+    .notes-log { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .note-entry {
+      background: #12122a; border-radius: 10px;
+      padding: 10px 12px; border-left: 3px solid var(--accent);
+      position: relative;
+    }
+    .note-entry-text { font-size: .88rem; font-weight: 500; color: var(--text); line-height: 1.5; }
+    .note-entry-meta { font-size: .7rem; color: var(--soft); font-weight: 600; margin-top: 4px; }
+    .note-delete {
+      position: absolute; top: 8px; right: 8px;
+      background: none; border: none; color: var(--soft);
+      font-size: .8rem; cursor: pointer; padding: 2px 6px;
+      border-radius: 6px; transition: color .2s;
+    }
+    .note-delete:hover { color: var(--red); }
+
+
+    /* ── SETTINGS BUTTON on home ── */
+    .btn-settings {
+      margin-top: 14px; padding: 8px 18px;
+      background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 100px; color: rgba(255,255,255,.85);
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+      letter-spacing: .04em;
+    }
+    .btn-settings:hover { background: rgba(255,255,255,.25); }
+    .btn-info { padding: 8px 14px; font-size: 1rem; }
+
+    /* ── SETTINGS SCREEN ── */
+    .settings-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .settings-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .settings-title { font-size: 1.2rem; font-weight: 900; color: #fff; flex: 1; }
+    .settings-desc {
+      font-size: .85rem; color: var(--soft); font-weight: 600;
+      line-height: 1.5; margin-bottom: 20px;
+    }
+
+    /* Drag-and-drop letter grid */
+    .settings-grid {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px;
+    }
+    .settings-set-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .settings-set-num {
+      font-size: .65rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--soft); width: 36px; flex-shrink: 0;
+      text-align: center;
+    }
+    .settings-letters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .drag-tile {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #9b5de5);
+      color: #fff; font-size: 1.2rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      cursor: grab; user-select: none;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+      box-shadow: 0 2px 8px rgba(124,58,237,.3);
+      touch-action: none;
+    }
+    .drag-tile:active { cursor: grabbing; transform: scale(1.08); box-shadow: 0 6px 18px rgba(124,58,237,.5); }
+    .drag-tile.dragging { opacity: .45; transform: scale(0.95); }
+    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #c77dff; }
+
+    .settings-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .settings-note { font-size: .75rem; color: var(--soft); font-weight: 600; text-align: center; line-height: 1.5; }
+
+
+
+
+    /* ── DASHBOARD NAME ROW ── */
+    .dash-name-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .dash-icon { font-size: 1.5rem; line-height: 1; }
+    .dash-name-row h2 { font-size: 1.2rem; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-cust-small {
+      background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.25);
+      border-radius: 8px; width: 28px; height: 28px; font-size: .85rem;
+      cursor: pointer; color: #fff; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .btn-cust-small:hover { background: rgba(255,255,255,.28); }
+
+    /* ── CUSTOMIZE SCREEN ── */
+    .cust-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .cust-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .cust-title  { font-size: 1.2rem; font-weight: 900; color: #fff; }
+    .cust-student-name { font-size: .95rem; font-weight: 700; color: var(--soft); margin-bottom: 16px; text-align: center; }
+
+    .cust-preview {
+      display: flex; justify-content: center; margin-bottom: 22px;
+    }
+    .cust-preview-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--surface2); border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; line-height: 1;
+      transition: border-color .3s;
+    }
+
+    .cust-section-label {
+      font-size: .75rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--soft); margin-bottom: 10px;
+    }
+
+    .cust-icons {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;
+    }
+    .cust-icon-btn {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface2); border: 2px solid var(--border);
+      font-size: 1.4rem; cursor: pointer;
+      transition: border-color .15s, transform .1s;
+    }
+    .cust-icon-btn:hover  { border-color: var(--accent); }
+    .cust-icon-btn:active { transform: scale(.92); }
+    .cust-icon-btn.selected { border-color: #fbbf24; background: #2a2000; }
+
+    .cust-colors {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px;
+    }
+    .cust-color-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 3px solid transparent; cursor: pointer;
+      transition: transform .1s, border-color .15s;
+    }
+    .cust-color-btn:hover  { transform: scale(1.1); }
+    .cust-color-btn:active { transform: scale(.93); }
+    .cust-color-btn.selected { border-color: #fff; transform: scale(1.12); }
+
+    .cust-actions { margin-bottom: 8px; }
+
+    /* Student list icon */
+    .student-icon { font-size: 1.1rem; margin-right: 2px; }
+
+
+    /* ── QR CODE SECTION ── */
+    .qr-section {
+      background: none; border-radius: 10px;
+      padding: 8px 4px; margin-top: 12px;
+      border: none; opacity: .75; transition: opacity .2s;
+    }
+    .qr-section:hover { opacity: 1; }
+    .qr-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px;
+    }
+    .qr-label {
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .04em; color: var(--soft);
+    }
+    .btn-qr-edit {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 4px 10px;
+      font-family: 'Teachers', sans-serif; font-size: .75rem;
+      font-weight: 700; color: var(--soft); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-qr-edit:hover { border-color: var(--accent); color: var(--accent); }
+    .qr-edit-row {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .qr-url-input {
+      flex: 1; padding: 8px 12px;
+      background: #12122a; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: 'Teachers', sans-serif;
+      font-size: .8rem; font-weight: 500; color: var(--text); outline: none;
+      transition: border-color .2s;
+    }
+    .qr-url-input:focus { border-color: var(--accent); }
+    .btn-qr-save {
+      padding: 8px 14px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 800;
+      cursor: pointer;
+    }
+    .qr-body { display: flex; align-items: center; gap: 16px; }
+    .qr-code {
+      flex-shrink: 0; background: #fff; border-radius: 10px;
+      padding: 8px; display: inline-block;
+    }
+    .qr-code canvas, .qr-code img { display: block; border-radius: 4px; }
+    .qr-url-display { display: none; }
+
+
+    .btn-customize-link {
+      background: none; border: none; padding: 4px 0 12px;
+      font-family: 'Teachers', sans-serif; font-size: .78rem;
+      font-weight: 700; color: var(--soft); cursor: pointer;
+      letter-spacing: .02em; text-align: left;
+      transition: color .2s;
+    }
+    .btn-customize-link:hover { color: var(--accent2); }
+
+
+    /* ── HOME section row ── */
+    .home-section-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .home-section-row .section-heading { margin-bottom: 0; }
+    .btn-class-view {
+      padding: 7px 14px; background: var(--surface2);
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 700;
+      color: var(--soft); cursor: pointer; white-space: nowrap;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-class-view:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── CLASS VIEW SCREEN ── */
+    .class-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .class-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .class-title { font-size: 1.2rem; font-weight: 900; color: #fff; flex: 1; }
+
+    /* By Letter grid */
+    .class-letter-section { margin-bottom: 20px; }
+    .class-set-label {
+      font-size: .72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--accent2);
+      border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 10px;
+    }
+    .class-letter-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .class-letter-badge {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 900; color: #fff;
+      font-family: 'Teachers', sans-serif;
+    }
+    .class-bar-wrap { flex: 1; }
+    .class-bar-labels {
+      display: flex; justify-content: space-between;
+      font-size: .65rem; font-weight: 700; color: var(--soft); margin-bottom: 3px;
+    }
+    .class-bar-track {
+      height: 12px; background: var(--surface2); border-radius: 100px; overflow: hidden;
+      display: flex;
+    }
+    .class-bar-known    { background: #166534; height: 100%; transition: width .4s; }
+    .class-bar-learning { background: #92400e; height: 100%; transition: width .4s; }
+    .class-bar-unseen   { background: #2e2e4a; height: 100%; }
+    .class-bar-stat {
+      font-size: .68rem; font-weight: 700; color: var(--soft);
+      white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right;
+    }
+
+    /* By Student grid */
+    .class-student-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .class-student-row:last-child { border-bottom: none; }
+    .class-student-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .class-student-name { font-size: .9rem; font-weight: 800; width: 90px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .class-mini-bar { flex: 1; height: 10px; background: var(--surface2); border-radius: 100px; overflow: hidden; display: flex; }
+    .class-pts-label { font-size: .7rem; font-weight: 700; color: var(--soft); min-width: 52px; text-align: right; flex-shrink: 0; }
+
+    /* Needs attention */
+    .needs-card {
+      background: var(--surface2); border-radius: 14px; padding: 14px 16px;
+      border: 2px solid var(--border); margin-bottom: 10px;
+    }
+    .needs-card.urgent { border-color: var(--red); }
+    .needs-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .needs-student-name { font-size: 1rem; font-weight: 800; flex: 1; }
+    .needs-badge {
+      font-size: .7rem; font-weight: 800; padding: 3px 10px;
+      border-radius: 100px; white-space: nowrap;
+    }
+    .needs-badge.days   { background: var(--red-bg); color: var(--red-dk); }
+    .needs-badge.slow   { background: var(--amber-bg); color: var(--amber-dk); }
+    .needs-struggling { display: flex; flex-wrap: wrap; gap: 5px; }
+    .needs-chip {
+      padding: 3px 10px; border-radius: 100px; font-size: .82rem; font-weight: 900;
+      background: var(--red-bg); color: var(--red-dk);
+    }
+    .class-empty {
+      text-align: center; padding: 32px 16px;
+      font-size: .95rem; font-weight: 600; color: var(--soft);
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- == SCREEN: HOME == -->
+  <div id="screen-home" class="screen active">
+    <header class="home-header">
+      <div class="app-logo"><svg class="abc-logo-svg" viewBox="0 0 300 260" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <filter id="chalky">
+      <feTurbulence type="fractalNoise" baseFrequency="0.7" numOctaves="3" stitchTiles="stitch" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="2.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+
+  <!-- Blast lines radiating outward -->
+  <line x1="150" y1="108" x2="268" y2="28"  stroke="#fbbf24" stroke-width="2" opacity="0.7" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="290" y2="108" stroke="#fbbf24" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="262" y2="198" stroke="#f59e0b" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="38"  y2="22"  stroke="#fbbf24" stroke-width="2" opacity="0.65" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="18"  y2="112" stroke="#fbbf24" stroke-width="1.5" opacity="0.5" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="42"  y2="202" stroke="#f59e0b" stroke-width="1.5" opacity="0.45" stroke-linecap="round"/>
+  <line x1="150" y1="108" x2="150" y2="8"   stroke="#fbbf24" stroke-width="1.5" opacity="0.45" stroke-linecap="round"/>
+
+  <!-- Stars at the ends of blast lines -->
+  <!-- top-right star - big, 4-point -->
+  <g transform="translate(268,24) rotate(15)">
+    <polygon points="0,-14 3.5,-3.5 14,0 3.5,3.5 0,14 -3.5,3.5 -14,0 -3.5,-3.5" fill="#fbbf24"/>
+  </g>
+  <!-- right star - small 4-point -->
+  <g transform="translate(289,106) rotate(-10)">
+    <polygon points="0,-9 2.2,-2.2 9,0 2.2,2.2 0,9 -2.2,2.2 -9,0 -2.2,-2.2" fill="#fde68a"/>
+  </g>
+  <!-- bottom-right star - medium, slightly purple -->
+  <g transform="translate(261,198) rotate(20)">
+    <polygon points="0,-11 2.8,-2.8 11,0 2.8,2.8 0,11 -2.8,2.8 -11,0 -2.8,-2.8" fill="#c4b5fd"/>
+  </g>
+  <!-- top-left star - big -->
+  <g transform="translate(36,20) rotate(-12)">
+    <polygon points="0,-13 3.2,-3.2 13,0 3.2,3.2 0,13 -3.2,3.2 -13,0 -3.2,-3.2" fill="#fbbf24"/>
+  </g>
+  <!-- left star - tiny -->
+  <g transform="translate(19,110) rotate(5)">
+    <polygon points="0,-7 1.8,-1.8 7,0 1.8,1.8 0,7 -1.8,1.8 -7,0 -1.8,-1.8" fill="#fde68a"/>
+  </g>
+  <!-- bottom-left star - medium purple -->
+  <g transform="translate(43,202) rotate(-8)">
+    <polygon points="0,-10 2.5,-2.5 10,0 2.5,2.5 0,10 -2.5,2.5 -10,0 -2.5,-2.5" fill="#a78bfa"/>
+  </g>
+  <!-- top-center small star -->
+  <g transform="translate(150,10) rotate(10)">
+    <polygon points="0,-8 2,-2 8,0 2,2 0,8 -2,2 -8,0 -2,-2" fill="#fbbf24"/>
+  </g>
+
+  <!-- Chalkboard frame -->
+  <rect x="33" y="52" width="236" height="202" rx="10" fill="#3d2810" opacity="0.4"/>
+  <rect x="29" y="48" width="236" height="202" rx="10" fill="#5c3d1e"/>
+  <rect x="29" y="234" width="236" height="16" rx="5" fill="#7a5230"/>
+  <rect x="41" y="60" width="210" height="162" rx="6" fill="#2d4a3e"/>
+
+  <!-- ruled line -->
+  <line x1="50" y1="158" x2="242" y2="158" stroke="#f0ede8" stroke-width="0.8" opacity="0.15" stroke-dasharray="4 5"/>
+
+  <!-- dust smudges -->
+  <ellipse cx="85"  cy="148" rx="26" ry="7" fill="#f0ede8" opacity="0.11" transform="rotate(-3 85 148)"/>
+  <ellipse cx="208" cy="175" rx="18" ry="5" fill="#f0ede8" opacity="0.09" transform="rotate(4 208 175)"/>
+
+  <!-- abc letters -->
+  <text x="75"  y="188" font-family="'Patrick Hand', cursive" font-size="104" fill="#f0ede8" opacity="0.93" filter="url(#chalky)" transform="rotate(-3 75 188)">a</text>
+  <text x="135" y="192" font-family="'Patrick Hand', cursive" font-size="104" fill="#f0ede8" opacity="0.91" filter="url(#chalky)" transform="rotate(2 135 192)">b</text>
+  <text x="193" y="186" font-family="'Patrick Hand', cursive" font-size="104" fill="#f0ede8" opacity="0.93" filter="url(#chalky)" transform="rotate(-1 193 186)">c</text>
+
+  <!-- chalk in tray -->
+  <rect x="53"  y="237" width="18" height="7" rx="3" fill="#f0ede8" opacity="0.5"/>
+  <rect x="77"  y="238" width="12" height="6" rx="3" fill="#f0ede8" opacity="0.45"/>
+  <rect x="218" y="237" width="16" height="7" rx="3" fill="#f0ede8" opacity="0.5"/>
+</svg></div>
+      <h1 class="app-title">Letter Sounds</h1>
+      <p class="app-tagline">Fluency Tracker</p>
+      <div style="display:flex;gap:8px;justify-content:center;align-items:center;">
+        <button class="btn-settings" onclick="showSettings()" title="Customize letter sets">⚙ Letter Sets</button>
+        <button class="btn-settings btn-info" onclick="showInfo()" title="How this app works">ⓘ</button>
+      </div>
+    </header>
+    <section>
+      <div class="home-section-row">
+        <h2 class="section-heading">Who's practicing today?</h2>
+        <button class="btn-class-view" onclick="showClassView()">&#x1F4CA; Class View</button>
+      </div>
+      <div class="add-row">
+        <input id="inp-name" type="text" placeholder="Enter student name…" maxlength="30" autocomplete="off" />
+        <button class="btn-add" onclick="addStudent()">+ Add</button>
+      </div>
+      <ul id="student-list" class="student-list"></ul>
+    </section>
+
+    <!-- QR Code section -->
+    <div class="qr-section">
+      <div class="qr-header">
+        <span class="qr-label">📱 Open on another device</span>
+        <button class="btn-qr-edit" onclick="toggleQrEdit()" id="btn-qr-edit">Edit URL</button>
+      </div>
+      <div id="qr-edit-row" class="qr-edit-row" style="display:none">
+        <input id="qr-url-input" class="qr-url-input" type="url"
+          placeholder="https://heathmck-a11y.github.io/soundfluency/" />
+        <button class="btn-qr-save" onclick="saveQrUrl()">Save</button>
+      </div>
+      <div class="qr-body">
+        <div id="qr-code" class="qr-code"></div>
+        <p id="qr-url-display" class="qr-url-display"></p>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- == SCREEN: DASHBOARD == -->
+  <div id="screen-dashboard" class="screen">
+    <div class="dash-topbar">
+      <button class="btn-back" onclick="showHome()">← Home</button>
+      <div class="dash-name-row">
+        <span id="dash-icon" class="dash-icon">⭐</span>
+        <h2 id="dash-name">Student</h2>
+      </div>
+      <div class="dash-topbar-btns">
+        <button class="btn-fa-topbar" onclick="showFormativeAssessment()">Formative Assessment</button>
+        <button class="btn-begin" onclick="showDurationPicker()">▶ Begin Practice</button>
+      </div>
+    </div>
+    <span class="points-label">SCORE (GOAL IS 520 PTS)</span>
+    <div class="points-section">
+      <div class="points-body">
+        <svg class="pie-svg" viewBox="0 0 90 90">
+          <defs>
+            <linearGradient id="pieGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#c77dff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="44" fill="#2a2a3e"/>
+          <path id="dash-pie" fill="url(#pieGrad)" d="M45,45 L45,1"/>
+        </svg>
+        <span id="dash-pct" class="pie-pts-big">0 points</span>
+      </div>
+    </div>
+    <!-- Daily practice streak -->
+    <div class="streak-section">
+      <div class="streak-header">
+        <span class="streak-label">Practice Streak</span>
+        <span class="streak-count"><span id="dash-streak-num">0</span> day streak 🔥</span>
+      </div>
+      <div id="streak-dots" class="streak-dots"></div>
+      <p id="streak-message" class="streak-message"></p>
+    </div>
+
+
+    <div class="letter-status-card">
+      <div class="grid-label">Letter Status</div>
+      <div id="letter-grid" class="letter-grid"></div>
+      <div class="legend">
+        <span><span class="ldot known"></span>Known (3-in-a-row, 3 days)</span>
+        <span><span class="ldot learning"></span>Practicing</span>
+        <span><span class="ldot unseen"></span>Not yet seen</span>
+      </div>
+    </div>
+    <!-- Teacher observations -->
+    <div class="notes-section">
+      <div class="notes-header">
+        <span class="notes-label">📝 Teacher Notes</span>
+        <button class="btn-notes-save" id="btn-save-note" onclick="saveNote()">Save</button>
+      </div>
+      <textarea id="notes-input" class="notes-input" placeholder="Add a quick observation…" rows="3" maxlength="500"></textarea>
+      <div id="notes-log" class="notes-log"></div>
+    </div>
+
+    <div class="reset-row">
+      <button class="btn-danger" onclick="confirmReset()">Reset Progress</button>
+    </div>
+  </div>
+
+
+  <!-- == SCREEN: SESSION (5-minute timer) == -->
+  <div id="screen-session" class="screen">
+    <div class="session-topbar">
+      <button class="btn-back" onclick="endSession()">← End Session Early</button>
+      <span id="sess-student" style="font-weight:800;font-size:1rem;"></span>
+      <button id="btn-pause" class="btn-pause" onclick="pauseSession()">Pause</button>
+    </div>
+
+    <!-- Circular countdown timer -->
+    <div class="timer-wrap">
+      <div class="timer-ring-wrap">
+        <svg class="timer-svg" viewBox="0 0 96 96">
+          <circle class="timer-track" cx="48" cy="48" r="41"/>
+          <circle id="timer-arc" class="timer-arc" cx="48" cy="48" r="41"/>
+        </svg>
+        <div id="timer-text" class="timer-text">2:00</div>
+      </div>
+      <div class="timer-label">remaining</div>
+    </div>
+
+
+    <!-- Rolling-set dots (which letters are in the active set) -->
+
+    <!-- Flashcard -->
+    <div class="card-stage">
+      <div id="flashcard" class="flashcard">
+        <span id="card-letter" class="card-letter">a</span>
+      </div>
+    </div>
+
+    <p class="adult-prompt">Ask: "What sound does this letter make?"<br>Tap the correct button below.</p>
+
+    <div class="resp-btns">
+      <button class="resp-btn resp-correct"  onclick="respond('correct')">correct</button>
+      <span class="resp-divider">·</span>
+      <button class="resp-btn resp-wrong"    onclick="respond('incorrect')">incorrect</button>
+      <span class="resp-divider">·</span>
+      <button class="resp-btn resp-provided" onclick="respond('provided')">answer provided</button>
+    </div>
+  </div>
+
+
+
+  <!-- == DURATION PICKER OVERLAY == -->
+  <div id="duration-overlay" class="duration-overlay">
+    <div class="duration-box">
+      <h3 class="duration-title">How long?</h3>
+      <div class="duration-btns">
+        <button class="btn-duration" onclick="beginWithDuration(1)">
+          <span class="dur-num">1</span>
+          <span class="dur-unit">min</span>
+        </button>
+        <button class="btn-duration" onclick="beginWithDuration(2)">
+          <span class="dur-num">2</span>
+          <span class="dur-unit">min</span>
+        </button>
+        <button class="btn-duration" onclick="beginWithDuration(3)">
+          <span class="dur-num">3</span>
+          <span class="dur-unit">min</span>
+        </button>
+        <button class="btn-duration" onclick="beginWithDuration(4)">
+          <span class="dur-num">4</span>
+          <span class="dur-unit">min</span>
+        </button>
+      </div>
+      <button class="btn-dur-cancel" onclick="closeDurationPicker()">Cancel</button>
+    </div>
+  </div>
+
+  <!-- == PAUSE OVERLAY == -->
+  <div id="pause-overlay" class="pause-overlay">
+    <div class="pause-box">
+      <div class="pause-icon">⏸</div>
+      <h2 class="pause-title">Paused</h2>
+      <button class="btn-confirm" onclick="resumeSession()">Resume Practice</button>
+      <button class="btn-finish" onclick="finishSession()">End Session Early</button>
+    </div>
+  </div>
+
+  <!-- == PROMPT OVERLAY (idle timer + incorrect response) == -->
+  <div id="prompt-overlay" class="prompt-overlay">
+    <div class="prompt-box">
+      <p class="prompt-instruction">
+        This is <span id="prompt-sound" class="prompt-slash-letter">a</span>.<br>
+        <strong id="prompt-cta">What sound?</strong>
+      </p>
+      <button class="btn-confirm" id="prompt-done-btn" onclick="handlePromptDone()">Done - answer provided</button>
+    </div>
+  </div>
+
+
+  <!-- == SCREEN: FORMATIVE ASSESSMENT == -->
+  <div id="screen-fa" class="screen">
+    <div class="fa-topbar">
+      <button class="btn-back" onclick="showDashboard()">← Back</button>
+      <h2 class="fa-title">Formative Assessment</h2>
+      <button class="btn-print" onclick="printReport()">🖨 Print</button>
+    </div>
+    <p id="fa-student-name" class="fa-student-name"></p>
+
+    <!-- Tab bar -->
+    <div class="fa-tabs">
+      <button class="fa-tab active" id="tab-now"      onclick="switchTab('now')">Current Status</button>
+      <button class="fa-tab"        id="tab-history"  onclick="switchTab('history')">History</button>
+    </div>
+
+    <!-- Tab panels -->
+    <div id="panel-now"      class="fa-panel active"></div>
+    <div id="panel-history"  class="fa-panel"></div>
+  </div>
+
+
+  <!-- == SCREEN: SETTINGS - Customize letter sets == -->
+  <div id="screen-settings" class="screen">
+    <div class="settings-topbar">
+      <button class="btn-back" onclick="showHome()">← Home</button>
+      <h2 class="settings-title">Customize Letter Sets</h2>
+    </div>
+    <p class="settings-desc">Drag letters to reorder them to match your school's scope &amp; sequence. Each row of <span id="set-size-display">6</span> letters is one set.</p>
+    <div id="settings-grid" class="settings-grid"></div>
+    <div class="settings-actions">
+      <button class="btn-primary" onclick="saveLetterOrder()">Save Order</button>
+      <button class="btn-secondary" onclick="resetLetterOrder()">Reset to Default</button>
+    </div>
+    <p class="settings-note">Changes take effect for all new sessions. Existing student progress is not affected.</p>
+  </div>
+
+
+
+  <!-- == SCREEN: STUDENT CUSTOMIZE == -->
+  <div id="screen-customize" class="screen">
+    <div class="cust-topbar">
+      <button class="btn-back" onclick="showDashboard()">← Back</button>
+      <h2 class="cust-title">Customize</h2>
+    </div>
+    <p id="cust-student-name" class="cust-student-name"></p>
+
+    <div class="cust-preview">
+      <div id="cust-preview-icon" class="cust-preview-icon">⭐</div>
+    </div>
+
+    <div class="cust-section-label">Pick an icon</div>
+    <div class="cust-icons">
+      <button class="cust-icon-btn" onclick="pickIcon('🦋')">🦋</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🌈')">🌈</button>
+      <button class="cust-icon-btn" onclick="pickIcon('⭐')">⭐</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🦄')">🦄</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🐢')">🐢</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🦊')">🦊</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🐬')">🐬</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🌺')">🌺</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🚀')">🚀</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🎸')">🎸</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🐱')">🐱</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🐸')">🐸</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🦁')">🦁</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🐧')">🐧</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🌙')">🌙</button>
+      <button class="cust-icon-btn" onclick="pickIcon('🍀')">🍀</button>
+    </div>
+
+    <div class="cust-section-label">Pick a color</div>
+    <div class="cust-colors">
+      <button class="cust-color-btn" id="color-purple" style="background:#9b5de5" onclick="pickColor('#9b5de5', 'purple')"></button>
+      <button class="cust-color-btn" id="color-pink" style="background:#ec4899" onclick="pickColor('#ec4899', 'pink')"></button>
+      <button class="cust-color-btn" id="color-blue" style="background:#3b82f6" onclick="pickColor('#3b82f6', 'blue')"></button>
+      <button class="cust-color-btn" id="color-teal" style="background:#14b8a6" onclick="pickColor('#14b8a6', 'teal')"></button>
+      <button class="cust-color-btn" id="color-green" style="background:#22c55e" onclick="pickColor('#22c55e', 'green')"></button>
+      <button class="cust-color-btn" id="color-orange" style="background:#f97316" onclick="pickColor('#f97316', 'orange')"></button>
+      <button class="cust-color-btn" id="color-yellow" style="background:#eab308" onclick="pickColor('#eab308', 'yellow')"></button>
+      <button class="cust-color-btn" id="color-red" style="background:#ef4444" onclick="pickColor('#ef4444', 'red')"></button>
+    </div>
+
+    <div class="cust-actions">
+      <button class="btn-primary" onclick="saveCustomization()">Save</button>
+    </div>
+  </div>
+
+
+  <!-- == SCREEN: CLASS VIEW == -->
+  <div id="screen-class" class="screen">
+    <div class="class-topbar">
+      <button class="btn-back" onclick="showHome()">← Home</button>
+      <h2 class="class-title">Class View</h2>
+    </div>
+
+    <!-- Tab bar -->
+    <div class="fa-tabs">
+      <button class="fa-tab active" id="classtab-letters" onclick="switchClassTab('letters')">By Letter</button>
+      <button class="fa-tab"        id="classtab-students" onclick="switchClassTab('students')">By Student</button>
+      <button class="fa-tab"        id="classtab-needs" onclick="switchClassTab('needs')">Needs Attention</button>
+    </div>
+
+    <div id="classpanel-letters"  class="fa-panel active"></div>
+    <div id="classpanel-students" class="fa-panel"></div>
+    <div id="classpanel-needs"    class="fa-panel"></div>
+  </div>
+
+  <!-- == SCREEN: RESULTS == -->
+  <div id="screen-results" class="screen">
+    <div class="results-wrap">
+      <div id="res-emoji" class="res-emoji">🌟</div>
+      <p id="res-name" class="res-name"></p>
+
+      <!-- Big points earned display -->
+      <div class="points-celebration">
+        <div id="res-confetti" class="confetti-row">⭐ ⭐ ⭐</div>
+        <div class="pts-earned-label">Points earned today</div>
+        <div id="res-pts-earned" class="pts-earned-number">0</div>
+        <div class="pts-earned-unit">points</div>
+        <div id="res-pts-total" class="pts-total-row"></div>
+
+      </div>
+      <div id="breakdown" class="breakdown"></div>
+
+      <!-- Mastery progress pie -->
+      <div class="res-pie-wrap">
+        <svg class="res-pie-svg" viewBox="0 0 90 90">
+          <defs>
+            <linearGradient id="resPieGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#7c3aed"/>
+              <stop offset="100%" stop-color="#c77dff"/>
+            </linearGradient>
+          </defs>
+          <circle cx="45" cy="45" r="44" fill="#2a2a3e"/>
+          <path id="res-pie" fill="url(#resPieGrad)" d="M45,45 L45,1"/>
+        </svg>
+        <div class="res-pie-label">
+          <span id="res-pie-pct" class="res-pie-pct">0%</span>
+          <span class="res-pie-sub">to full mastery</span>
+        </div>
+      </div>
+
+      <div class="res-actions">
+        <button class="btn-primary"   onclick="startSession()">Practice Again</button>
+        <button class="btn-secondary" onclick="showDashboard()">View Progress</button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- Hidden print container -- only visible when window.print() is called -->
+  <div id="print-container"></div>
+
+  <script>
+
+    // ========================================================
+    // CONSTANTS & CONFIGURATION
+    // ========================================================
+
+    // localStorage key
+    const STORE = 'letterSounds_v3';
+
+    // Default letter order - can be customized via the settings screen
+    const DEFAULT_LETTERS = [
+      's','a','t','i','p','n',
+      'm','e','r','o','d','c',
+      'h','b','l','f','g','u',
+      'w','k','j','v','y','z',
+      'q','x'
+    ];
+    // Load custom order from localStorage if saved, otherwise use default
+    let LETTERS = (() => {
+      try {
+        const saved = localStorage.getItem('letterSounds_letterOrder');
+        if (saved) {
+          const parsed = JSON.parse(saved);
+          if (Array.isArray(parsed) && parsed.length === 26 &&
+              new Set(parsed).size === 26 &&
+              parsed.every(l => /^[a-z]$/.test(l))) return parsed;
+        }
+      } catch(e) {}
+      return [...DEFAULT_LETTERS];
+    })();
+
+    // Alphabetical order (used for grid display only)
+    const LETTERS_ALPHA = 'abcdefghijklmnopqrstuvwxyz'.split('');
+
+    const SESSION_SECS    = 2 * 60;  // default session length (overridden by duration picker)
+    const SET_SIZE        = 6;       // letters per set
+    const DAY_STREAK_NEEDED = 2;     // correct-in-a-row to pass a day
+    const DAYS_NEEDED     = 3;       // days needed for mastery
+    const KNOWN_STREAK    = 3;       // in-session streak for mid-session promotion
+    const KNOWN_REVIEW_COUNT = 2;    // known letters sprinkled per set for retention
+    const PTS_PER_PASS    = 5;       // points for passing on days 1-2
+    const PTS_MASTERY     = 10;      // points for mastery day
+    const MAX_POINTS      = 26 * (PTS_PER_PASS * 2 + PTS_MASTERY); // 520
+    const CIRC            = 2 * Math.PI * 41; // SVG timer arc circumference (r=41)
+    const IDLE_SECS       = 5;       // seconds before idle overlay appears
+
+    // -- App state ------------------------------------------
+    let state = {
+      students:         [],
+      currentStudentId: null,
+      session:          null,
+      chosenDuration:   null,
+    };
+
+
+    // ========================================================
+    // SCREEN NAVIGATION
+    // ========================================================
+    function showScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      window.scrollTo(0, 0);
+    }
+    function showHome()      { renderStudentList(); showScreen('screen-home'); }
+    function showDashboard() { const s = currentStudent(); if (!s) return showHome(); renderDashboard(s); showScreen('screen-dashboard'); }
+
+    // ========================================================
+    // STUDENT HELPERS
+    // ========================================================
+    function today() { return new Date().toISOString().slice(0, 10); }
+
+    function freshScores() {
+      const scores = {}, streak = {}, history = {}, responses = {};
+      LETTERS_ALPHA.forEach(l => { scores[l]='unseen'; streak[l]=0; history[l]=[]; responses[l]=[]; });
+      return { scores, streak, history, responses };
+    }
+
+    function getStudent(id)    { return state.students.find(s => s.id === id) || null; }
+    function currentStudent()  { return getStudent(state.currentStudentId); }
+
+    function countScores(student) {
+      let known=0, learning=0, unseen=0;
+      LETTERS_ALPHA.forEach(l => {
+        const v = student.scores[l];
+        if      (v==='known')    known++;
+        else if (v==='learning') learning++;
+        else                     unseen++;
+      });
+      return { known, learning, unseen };
+    }
+
+    function passedDays(student, letter) {
+      return ((student.history||{})[letter]||[]).filter(e=>e.passed).length;
+    }
+
+    function calcPoints(student) {
+      let total = 0;
+      LETTERS_ALPHA.forEach(l => {
+        const hist = (student.history||{})[l]||[];
+        hist.filter(e=>e.passed).forEach((_, idx) => {
+          total += (idx+1 === DAYS_NEEDED) ? PTS_MASTERY : PTS_PER_PASS;
+        });
+      });
+      return total;
+    }
+
+    // ========================================================
+    // HOME SCREEN - STUDENT ROSTER
+    // ========================================================
+    function renderStudentList() {
+      const ul = document.getElementById('student-list');
+      ul.innerHTML = '';
+      if (!state.students.length) {
+        ul.innerHTML = '<li class="empty-state">No students yet - add one above!</li>';
+        return;
+      }
+      state.students.forEach(student => {
+        const { known, learning, unseen } = countScores(student);
+        const li = document.createElement('li');
+        li.className = 'student-item';
+        li.innerHTML = `
+          <div class="student-left" onclick="selectStudent('${student.id}')">
+            <span class="student-name"><span class="student-icon">${student.icon||'⭐'}</span>${escHtml(student.name)}</span>
+
+          </div>
+          <button class="btn-customize-inline" onclick="event.stopPropagation();state.currentStudentId='${student.id}';showCustomize()">✏</button>
+          <span class="student-arrow" onclick="selectStudent('${student.id}')">›</span>
+          <button class="btn-delete" onclick="deleteStudent('${student.id}',event)">🗑</button>`;
+        ul.appendChild(li);
+      });
+    }
+
+    function addStudent() {
+      const inp  = document.getElementById('inp-name');
+      const name = inp.value.trim();
+      if (!name) { inp.focus(); return; }
+      const { scores, streak, history, responses } = freshScores();
+      state.students.push({ id:'stu_'+Date.now(), name, scores, streak, history, responses, practiceDays:[], notes:[], icon:'⭐', color:'#9b5de5' });
+      saveState(); inp.value = ''; renderStudentList();
+    }
+
+    document.getElementById('inp-name').addEventListener('keydown', e => { if(e.key==='Enter') addStudent(); });
+
+    function deleteStudent(id, e) {
+      e.stopPropagation();
+      state.students = state.students.filter(x => x.id !== id);
+      saveState(); renderStudentList();
+    }
+
+    function selectStudent(id) { state.currentStudentId = id; showDashboard(); }
+
+    // ========================================================
+    // DASHBOARD
+    // ========================================================
+    function renderDashboard(student) {
+      document.getElementById('dash-name').textContent = student.name;
+      applyStudentTheme(student);
+      renderStreakSection(student);
+      renderNotes(student);
+
+      // Pie chart
+      const pts   = calcPoints(student);
+      const ratio = Math.min(1, pts / MAX_POINTS);
+      document.getElementById('dash-pct').textContent = pts;
+      const cx=45, cy=45, r=44;
+      const angle = ratio * 2 * Math.PI;
+      const x = cx + r * Math.sin(angle);
+      const y = cy - r * Math.cos(angle);
+      const largeArc = angle > Math.PI ? 1 : 0;
+      const d = ratio >= 1
+        ? `M${cx},${cy} m-${r},0 a${r},${r} 0 1,1 ${r*2},0 a${r},${r} 0 1,1 -${r*2},0`
+        : ratio <= 0 ? `M${cx},${cy}`
+        : `M${cx},${cy} L${cx},${cy-r} A${r},${r} 0 ${largeArc},1 ${x},${y} Z`;
+      document.getElementById('dash-pie').setAttribute('d', d);
+
+      // Letter grid
+      const grid = document.getElementById('letter-grid');
+      grid.innerHTML = '';
+      LETTERS_ALPHA.forEach(l => {
+        const cell = document.createElement('div');
+        const status = student.scores[l];
+        const days   = passedDays(student, l);
+        cell.className = `grid-cell ${status}`;
+        cell.innerHTML = `<span class="ltr">${l}</span><span class="sdot"></span>`;
+        cell.title = status==='known' ? `${l}: mastered!` : status==='learning' ? `${l}: ${days}/3 days` : `${l}: not yet seen`;
+        grid.appendChild(cell);
+      });
+    }
+
+    function applyStudentTheme(student) {
+      const color = student.color || '#9b5de5';
+      const grad  = document.getElementById('pieGrad');
+      if (grad) {
+        grad.querySelector('stop:first-child').setAttribute('stop-color', color);
+        grad.querySelector('stop:last-child').setAttribute('stop-color', shiftColor(color, 40));
+      }
+      document.getElementById('dash-icon').textContent = student.icon || '⭐';
+    }
+
+    function shiftColor(hex, amt) {
+      const n = parseInt(hex.slice(1), 16);
+      const r = Math.min(255, (n>>16)+amt), g = Math.min(255,((n>>8)&0xff)+amt), b = Math.min(255,(n&0xff)+amt);
+      return '#'+[r,g,b].map(v=>v.toString(16).padStart(2,'0')).join('');
+    }
+
+    // ========================================================
+    // DAILY STREAK
+    // ========================================================
+    function recordPracticeDay() {
+      const student = currentStudent();
+      if (!student) return;
+      if (!student.practiceDays) student.practiceDays = [];
+      const t = today();
+      if (!student.practiceDays.includes(t)) student.practiceDays.push(t);
+    }
+
+    function calcStreak(practiceDays) {
+      if (!practiceDays || !practiceDays.length) return 0;
+      const sorted  = [...new Set(practiceDays)].sort().reverse();
+      const t       = today();
+      const msPerDay = 86400000;
+      let streak = 0;
+      let checkDate = new Date(t);
+      for (const d of sorted) {
+        const dDate = new Date(d);
+        const diffDays = Math.round((checkDate - dDate) / msPerDay);
+        if (diffDays === 0 || diffDays === 1) { streak++; checkDate = new Date(dDate - msPerDay); }
+        else break;
+      }
+      return streak;
+    }
+
+    function renderStreakSection(student) {
+      const days   = student.practiceDays || [];
+      const streak = calcStreak(days);
+      const t      = today();
+      const pracSet = new Set(days);
+      document.getElementById('dash-streak-num').textContent = streak;
+      const dots = document.getElementById('streak-dots');
+      dots.innerHTML = '';
+      for (let i=6; i>=0; i--) {
+        const d   = new Date(new Date(t) - i*86400000);
+        const key = d.toISOString().slice(0,10);
+        const isToday   = key===t;
+        const practiced = pracSet.has(key);
+        const dayLabel  = ['S','M','T','W','T','F','S'][d.getDay()];
+        const dot = document.createElement('div');
+        dot.className   = isToday&&practiced ? 'streak-dot today' : isToday ? 'streak-dot today-empty' : practiced ? 'streak-dot practiced' : 'streak-dot';
+        dot.textContent = dayLabel;
+        dot.title       = practiced ? `Practiced on ${key}` : key;
+        dots.appendChild(dot);
+      }
+      const msg = document.getElementById('streak-message');
+      const practicedToday = pracSet.has(t);
+      if (streak===0 && !practicedToday)   msg.innerHTML = 'Start your streak - practice today!';
+      else if (!practicedToday)            msg.innerHTML = `<strong>${streak}-day streak</strong> - come back today to keep it going!`;
+      else if (streak===1)                 msg.innerHTML = 'Great start! Come back tomorrow to build your streak.';
+      else if (streak<5)                   msg.innerHTML = `<strong>${streak} days in a row!</strong> Keep it up! 🌟`;
+      else                                 msg.innerHTML = `<strong>${streak} days in a row!</strong> Amazing work! 🔥`;
+    }
+
+    // ========================================================
+    // DAILY RESULTS & MASTERY PROGRESSION
+    // ========================================================
+    let masteryQueue = [];
+
+    function recordDailyResults() {
+      const sess    = state.session;
+      const student = currentStudent();
+      if (!sess || !student) return 0;
+      const t = today();
+      if (!student.history) student.history = {};
+      let sessionPoints = 0;
+
+      LETTERS_ALPHA.forEach(l => {
+        if (!sess.practicedLetters.has(l)) return;
+        if (!student.history[l]) student.history[l] = [];
+        const passed = (student.streak[l]||0) >= DAY_STREAK_NEEDED;
+        const existing = student.history[l].find(e => e.date===t);
+        const wasAlreadyPassed = existing && existing.passed;
+        if (existing) { if (passed) existing.passed = true; }
+        else student.history[l].push({ date:t, passed });
+
+        if (passed && !wasAlreadyPassed) {
+          const daysNow = passedDays(student, l);
+          sessionPoints += (daysNow===DAYS_NEEDED) ? PTS_MASTERY : PTS_PER_PASS;
+        }
+
+        const wasKnown = student.scores[l]==='known';
+        const days = passedDays(student, l);
+        if (days >= DAYS_NEEDED) {
+          student.scores[l] = 'known';
+          if (!wasKnown) masteryQueue.push(l);
+        } else if (student.scores[l]!=='known') {
+          if (student.scores[l]==='unseen' && sess.practicedLetters.has(l)) student.scores[l]='learning';
+        }
+      });
+
+      masteryQueue = [];
+      return sessionPoints;
+    }
+
+    // ========================================================
+    // SESSION - BUILD QUEUE
+    // ========================================================
+    function injectNextUnseen(student, sess) {
+      const inQueue    = new Set(sess.queue.slice(sess.cardIndex));
+      const nextUnseen = LETTERS.find(l => student.scores[l]==='unseen' && !inQueue.has(l));
+      if (!nextUnseen) return;
+      const insertAt = Math.min(sess.cardIndex+2, sess.queue.length);
+      sess.queue.splice(insertAt, 0, nextUnseen);
+      sess.setProgress[nextUnseen] = null;
+    }
+
+    function buildQueue(student) {
+      const learning = shuffle(LETTERS.filter(l => student.scores[l]==='learning'));
+      const unseen   = LETTERS.filter(l => student.scores[l]==='unseen');
+      const known    = shuffle(LETTERS.filter(l => student.scores[l]==='known'));
+      const activeCount = learning.length + unseen.length;
+      const reviewSlots = activeCount>0 ? Math.min(KNOWN_REVIEW_COUNT, known.length) : known.length;
+      const ordered = [...learning, ...unseen, ...known.slice(0, reviewSlots)];
+      if (!ordered.length) return LETTERS.slice(0, SET_SIZE);
+      return ordered.slice(0, SET_SIZE);
+    }
+
+    function startSession() {
+      const student = currentStudent();
+      if (!student) return;
+      LETTERS_ALPHA.forEach(l => { student.streak[l] = 0; });
+      const queue = buildQueue(student);
+      const setProgress = {};
+      queue.forEach(l => setProgress[l]=null);
+      state.session = {
+        queue, setProgress,
+        cardIndex:       0,
+        totalCorrect:    0, totalWrong:    0, totalProvided: 0,
+        correctLetters:  new Set(), wrongLetters: new Set(), providedLetters: new Set(),
+        practicedLetters: new Set(),
+        instantStreak:   {},
+        secsLeft:        state.chosenDuration || SESSION_SECS,
+        timerInterval:   null,
+        cardTimer:       null,
+        paused:          false,
+        cardShownAt:     0,
+      };
+      showScreen('screen-session');
+      renderCard();
+      startTimer();
+    }
+
+    function startTimer() {
+      const sess = state.session;
+      if (!sess) return;
+      updateTimerUI(sess.secsLeft);
+      sess.timerInterval = setInterval(() => {
+        if (sess.paused) return;
+        sess.secsLeft--;
+        updateTimerUI(sess.secsLeft);
+        if (sess.secsLeft <= 0) { stopTimer(); showResults(); }
+      }, 1000);
+    }
+
+    // ========================================================
+    // CONFIRM RESET
+    // ========================================================
+    function confirmReset() {
+      const s = currentStudent();
+      if (!s) return;
+      const fresh = freshScores();
+      s.scores = fresh.scores; s.streak = fresh.streak;
+      s.history = fresh.history; s.responses = fresh.responses;
+      s.practiceDays = [];
+      saveState(); renderDashboard(s); toast('Progress reset','red');
+    }
+
+    // ========================================================
+    // FORMATIVE ASSESSMENT
+    // ========================================================
+    let currentTab = 'now';
+
+    function showFormativeAssessment() {
+      const student = currentStudent();
+      if (!student) return;
+      document.getElementById('fa-student-name').textContent = student.name;
+      switchTab('now');
+      showScreen('screen-fa');
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      ['now','history'].forEach(t => {
+        document.getElementById('tab-'+t).classList.toggle('active', t===tab);
+        const p = document.getElementById('panel-'+t);
+        if (p) p.classList.toggle('active', t===tab);
+      });
+      renderFAPanel(tab);
+    }
+
+    function renderFAPanel(tab) {
+      const student = currentStudent();
+      const panel   = document.getElementById('panel-'+tab);
+      if (!student || !panel) return;
+      if (tab==='now')     panel.innerHTML = renderRightNow(student);
+      else if (tab==='history') panel.innerHTML = renderHistory(student);
+    }
+
+    const GRAD_COLORS = [
+      { bg:'#dc2626' }, { bg:'#c2410c' }, { bg:'#ea580c' },
+      { bg:'#ca8a04' }, { bg:'#65a30d' }, { bg:'#16a34a' }, { bg:'#166534' },
+    ];
+
+    function letterColorIndex(student, letter) {
+      const score = (student.scores||{})[letter]||'unseen';
+      const days  = passedDays(student, letter);
+      if (score==='unseen') return null;
+      if (score==='known')  return 6;
+      const resps   = (student.responses||{})[letter]||[];
+      const total   = resps.length;
+      const correct = resps.filter(r=>r.outcome==='correct').length;
+      if (total===0) {
+        const hist = (student.history||{})[letter]||[];
+        if (!hist.length) return 0;
+        const ratio = hist.filter(e=>e.passed).length / hist.length;
+        if (days>=2) return 5; if (ratio>=0.75) return 4; if (ratio>=0.55) return 3;
+        if (ratio>=0.35) return 2; if (ratio>=0.15) return 1; return 0;
+      }
+      const ratio = correct / total;
+      if (days>=2) return 5; if (ratio>=0.85) return 4; if (ratio>=0.65) return 3;
+      if (ratio>=0.40) return 2; if (ratio>=0.20) return 1; return 0;
+    }
+
+    function renderRightNow(student) {
+      const swatches = GRAD_COLORS.map(c=>`<div class="fa-gradient-key-swatch" style="background:${c.bg}"></div>`).join('');
+      let gridRows = '';
+      for (let i=0; i<LETTERS.length; i+=SET_SIZE) {
+        const setLetters = LETTERS.slice(i, i+SET_SIZE);
+        const setNum = Math.floor(i/SET_SIZE)+1;
+        const cards = setLetters.map(l => {
+          const idx  = letterColorIndex(student, l);
+          const days = passedDays(student, l);
+          if (idx===null) return `<div class="fa-letter-card unseen" title="${l}: not yet seen">${l}</div>`;
+          const color = GRAD_COLORS[idx].bg;
+          return `<div class="fa-letter-card" style="background:${color}" title="${l}: ${idx<6?days+'/3 days':'mastered!'}">${l}<span class="fa-days">${idx<6?days+'/3':'✓'}</span></div>`;
+        }).join('');
+        gridRows += `<div class="fa-set-row"><span class="fa-set-label">Set ${setNum}</span><div class="fa-letters-grid" style="grid-template-columns:repeat(${setLetters.length},36px);margin-bottom:0">${cards}</div></div>`;
+      }
+      return `<div class="fa-gradient-key">${swatches}</div>
+        <div class="fa-gradient-labels"><span>Many misses</span><span>Mastered</span></div>
+        <div class="fa-key-explanation"><strong>Explanation:</strong> Tasks that are not automated at the moment (but hopefully will be). Colors show each letter's journey from many misses (red) to gaining accuracy, to mastered (3 correct in a row across 3 days, shown in dark green).</div>
+        ${gridRows}`;
+    }
+
+    function renderHistory(student) {
+      let setSections = '';
+      for (let i=0; i<LETTERS.length; i+=SET_SIZE) {
+        const setLetters = LETTERS.slice(i, i+SET_SIZE);
+        const setNum = Math.floor(i/SET_SIZE)+1;
+        const rows = setLetters.map(l => {
+          const resps = (student.responses||{})[l]||[];
+          const score = student.scores[l];
+          const known = score==='known';
+          if (!resps.length) return `<div class="hist-letter-row"><div class="hist-letter-badge">${l}</div><span class="hist-unseen">Not yet seen</span></div>`;
+          const correct = resps.filter(r=>r.outcome==='correct').length;
+          const wrong   = resps.filter(r=>r.outcome!=='correct').length;
+          const dots    = resps.map(r=>`<span class="hist-dot ${r.outcome==='correct'?'correct':r.outcome==='provided'?'provided':'incorrect'}" title="${r.date}: ${r.outcome}"></span>`).join('');
+          return `<div class="hist-letter-row"><div class="hist-letter-badge ${known?'known':''}">${l}</div><div class="hist-counts"><span class="hist-count incorrect">✗ ${wrong}</span><span class="hist-count correct">✓ ${correct}</span></div><div class="hist-dots">${dots}</div></div>`;
+        }).join('');
+        setSections += `<div class="hist-set-section"><div class="hist-set-label">Set ${setNum}</div>${rows}</div>`;
+      }
+      return `<div style="font-size:.75rem;font-weight:700;color:var(--soft);margin-bottom:12px;display:flex;gap:14px"><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#dc2626;margin-right:4px;vertical-align:middle"></span>Incorrect</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#ea580c;margin-right:4px;vertical-align:middle"></span>Answer provided</span><span><span style="display:inline-block;width:10px;height:10px;border-radius:50%;background:#16a34a;margin-right:4px;vertical-align:middle"></span>Correct</span></div>${setSections}`;
+    }
+
+    // ========================================================
+    // STUDENT CUSTOMIZATION
+    // ========================================================
+    let _custIcon='⭐', _custColor='#9b5de5';
+
+    function showCustomize() {
+      const student = currentStudent();
+      if (!student) return;
+      _custIcon=student.icon||'⭐'; _custColor=student.color||'#9b5de5';
+      document.getElementById('cust-student-name').textContent = student.name;
+      updateCustPreview();
+      document.querySelectorAll('.cust-icon-btn').forEach(b=>b.classList.toggle('selected',b.textContent===_custIcon));
+      document.querySelectorAll('.cust-color-btn').forEach(b=>b.classList.toggle('selected',b.style.backgroundColor===_custColor||b.style.background===_custColor));
+      showScreen('screen-customize');
+    }
+
+    function pickIcon(icon) {
+      _custIcon=icon; updateCustPreview();
+      document.querySelectorAll('.cust-icon-btn').forEach(b=>b.classList.toggle('selected',b.textContent===icon));
+    }
+
+    function pickColor(hex, id) {
+      _custColor=hex; updateCustPreview();
+      document.querySelectorAll('.cust-color-btn').forEach(b=>b.classList.toggle('selected',b.id==='color-'+id));
+    }
+
+    function updateCustPreview() {
+      const p=document.getElementById('cust-preview-icon');
+      p.textContent=_custIcon; p.style.borderColor=_custColor;
+      p.style.boxShadow=`0 0 20px ${_custColor}55`;
+    }
+
+    function saveCustomization() {
+      const s=currentStudent(); if(!s) return;
+      s.icon=_custIcon; s.color=_custColor;
+      saveState(); showDashboard();
+    }
+
+
+
+    // ========================================================
+    // CLASS VIEW
+    // ========================================================
+    let _classTab = 'letters';
+
+    function showClassView() {
+      if (!state.students.length) { toast('No students yet!', 'red'); return; }
+      switchClassTab('letters');
+      showScreen('screen-class');
+    }
+
+    function switchClassTab(tab) {
+      _classTab = tab;
+      ['letters','students','needs'].forEach(t => {
+        document.getElementById('classtab-'+t).classList.toggle('active', t===tab);
+        document.getElementById('classpanel-'+t).classList.toggle('active', t===tab);
+      });
+      if (tab==='letters')  renderClassByLetter();
+      if (tab==='students') renderClassByStudent();
+      if (tab==='needs')    renderClassNeeds();
+    }
+
+    // -- BY LETTER: for each letter show what % of students know/learning/unseen --
+    function renderClassByLetter() {
+      const panel = document.getElementById('classpanel-letters');
+      const students = state.students;
+      if (!students.length) { panel.innerHTML = '<div class="class-empty">No students yet.</div>'; return; }
+
+      let html = '';
+      for (let i = 0; i < LETTERS.length; i += SET_SIZE) {
+        const setLetters = LETTERS.slice(i, i + SET_SIZE);
+        const setNum = Math.floor(i / SET_SIZE) + 1;
+        let rows = '';
+        setLetters.forEach(l => {
+          const known    = students.filter(s => s.scores[l]==='known').length;
+          const learning = students.filter(s => s.scores[l]==='learning').length;
+          const unseen   = students.filter(s => s.scores[l]==='unseen').length;
+          const total    = students.length;
+          const knownPct    = Math.round(known/total*100);
+          const learningPct = Math.round(learning/total*100);
+          const unseenPct   = 100 - knownPct - learningPct;
+          // Color the badge by average status
+          const bg = known===total ? '#166534' : known>0||learning>0 ? '#92400e' : '#2e2e4a';
+          const urbanist = ['k'].includes(l);
+          rows += `<div class="class-letter-row">
+            <div class="class-letter-badge" style="background:${bg};font-family:${urbanist?"'Teachers'":"'Teachers'"}, sans-serif">${l}</div>
+            <div class="class-bar-wrap">
+              <div class="class-bar-labels">
+                <span>${known} known · ${learning} practicing · ${unseen} unseen</span>
+              </div>
+              <div class="class-bar-track">
+                <div class="class-bar-known"    style="width:${knownPct}%"></div>
+                <div class="class-bar-learning" style="width:${learningPct}%"></div>
+                <div class="class-bar-unseen"   style="width:${unseenPct}%"></div>
+              </div>
+            </div>
+            <div class="class-bar-stat">${knownPct}%</div>
+          </div>`;
+        });
+        html += `<div class="class-letter-section">
+          <div class="class-set-label">Set ${setNum}</div>
+          ${rows}
+        </div>`;
+      }
+      panel.innerHTML = html;
+    }
+
+    // -- BY STUDENT: each student's overall progress bar --
+    function renderClassByStudent() {
+      const panel    = document.getElementById('classpanel-students');
+      const students = [...state.students].sort((a,b) => calcPoints(b) - calcPoints(a));
+      if (!students.length) { panel.innerHTML = '<div class="class-empty">No students yet.</div>'; return; }
+
+      const rows = students.map(s => {
+        const pts  = calcPoints(s);
+        const { known, learning } = countScores(s);
+        const knownPct    = Math.round(known/26*100);
+        const learningPct = Math.round(learning/26*100);
+        const streak = calcStreak(s.practiceDays||[]);
+        return `<div class="class-student-row">
+          <span class="class-student-icon">${s.icon||'⭐'}</span>
+          <span class="class-student-name">${escHtml(s.name)}</span>
+          <div class="class-mini-bar">
+            <div class="class-bar-known"    style="width:${knownPct}%"></div>
+            <div class="class-bar-learning" style="width:${learningPct}%"></div>
+          </div>
+          <span class="class-pts-label">${pts} pts · 🔥${streak}</span>
+        </div>`;
+      }).join('');
+
+      panel.innerHTML = `
+        <div style="font-size:.72rem;font-weight:700;color:var(--soft);display:flex;gap:14px;margin-bottom:12px">
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#166534;margin-right:4px"></span>Known</span>
+          <span><span style="display:inline-block;width:10px;height:10px;border-radius:3px;background:#92400e;margin-right:4px"></span>Practicing</span>
+          <span style="color:var(--soft)">Sorted by points ↓</span>
+        </div>
+        ${rows}`;
+    }
+
+    // -- NEEDS ATTENTION: students behind + letters the class is struggling with --
+    function renderClassNeeds() {
+      const panel    = document.getElementById('classpanel-needs');
+      const students = state.students;
+      if (!students.length) { panel.innerHTML = '<div class="class-empty">No students yet.</div>'; return; }
+
+      const todayStr = today();
+      let html = '';
+
+      // Students who haven't practiced in 3+ days
+      const inactive = students.filter(s => {
+        const days = s.practiceDays||[];
+        if (!days.length) return true;
+        const last = [...days].sort().reverse()[0];
+        const diffDays = Math.round((new Date(todayStr) - new Date(last)) / 86400000);
+        return diffDays >= 3;
+      });
+
+      // Letters where >50% of students are stuck (learning with 0 passed days)
+      const struggling = LETTERS.filter(l => {
+        const stuck = students.filter(s => s.scores[l]==='learning' && passedDays(s,l)===0).length;
+        return stuck / students.length > 0.5;
+      });
+
+      if (!inactive.length && !struggling.length) {
+        panel.innerHTML = '<div class="class-empty">🎉 All students are on track!</div>';
+        return;
+      }
+
+      if (inactive.length) {
+        html += '<div class="class-set-label" style="margin-bottom:10px">⏰ Not practiced in 3+ days</div>';
+        inactive.forEach(s => {
+          const days = s.practiceDays||[];
+          const last = days.length ? [...days].sort().reverse()[0] : null;
+          const diffDays = last ? Math.round((new Date(todayStr)-new Date(last))/86400000) : null;
+          const label = diffDays===null ? 'Never practiced' : `${diffDays} days ago`;
+          html += `<div class="needs-card urgent">
+            <div class="needs-card-header">
+              <span class="class-student-icon">${s.icon||'⭐'}</span>
+              <span class="needs-student-name">${escHtml(s.name)}</span>
+              <span class="needs-badge days">${label}</span>
+            </div>
+          </div>`;
+        });
+      }
+
+      if (struggling.length) {
+        html += '<div class="class-set-label" style="margin-top:16px;margin-bottom:10px">📌 Letters most students are stuck on</div>';
+        html += '<div class="needs-card"><div class="needs-struggling">';
+        struggling.forEach(l => { html += `<span class="needs-chip">${l}</span>`; });
+        html += '</div><p style="font-size:.75rem;color:var(--soft);margin-top:8px;font-weight:600">More than half the class has seen these letters but not yet passed. Consider whole-group review.</p></div>';
+      }
+
+      panel.innerHTML = html;
+    }
+
+    // ========================================================
+    // LETTER ORDER CUSTOMIZATION
+    // ========================================================
+    let _dragSrc = null; // index of tile being dragged
+
+    function showSettings() {
+      renderSettingsGrid();
+      document.getElementById('set-size-display').textContent = SET_SIZE;
+      showScreen('screen-settings');
+    }
+
+    function renderSettingsGrid() {
+      const grid = document.getElementById('settings-grid');
+      grid.innerHTML = '';
+
+      // Show letters in their current order, grouped by SET_SIZE
+      for (let i = 0; i < LETTERS.length; i += SET_SIZE) {
+        const row = document.createElement('div');
+        row.className = 'settings-set-row';
+        const setNum = Math.floor(i / SET_SIZE) + 1;
+        row.innerHTML = `<span class="settings-set-num">Set ${setNum}</span>`;
+        const lettersDiv = document.createElement('div');
+        lettersDiv.className = 'settings-letters';
+
+        LETTERS.slice(i, i + SET_SIZE).forEach((letter, j) => {
+          const globalIdx = i + j;
+          const tile = document.createElement('div');
+          tile.className = 'drag-tile';
+          tile.textContent = letter;
+          tile.draggable = true;
+          tile.dataset.idx = globalIdx;
+
+          // -- Desktop drag events --
+          tile.addEventListener('dragstart', e => {
+            _dragSrc = globalIdx;
+            tile.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+          });
+          tile.addEventListener('dragend', () => tile.classList.remove('dragging'));
+          tile.addEventListener('dragover', e => { e.preventDefault(); tile.classList.add('drag-over'); });
+          tile.addEventListener('dragleave', () => tile.classList.remove('drag-over'));
+          tile.addEventListener('drop', e => {
+            e.preventDefault();
+            tile.classList.remove('drag-over');
+            if (_dragSrc !== null && _dragSrc !== globalIdx) {
+              // Swap the two letters
+              const tmp = LETTERS[_dragSrc];
+              LETTERS[_dragSrc] = LETTERS[globalIdx];
+              LETTERS[globalIdx] = tmp;
+              renderSettingsGrid();
+            }
+          });
+
+          // -- Touch drag (tap-swap: tap one then tap another) --
+          tile.addEventListener('click', () => {
+            if (_dragSrc === null) {
+              // First tap - select this tile
+              _dragSrc = globalIdx;
+              tile.style.boxShadow = '0 0 0 3px #fbbf24';
+            } else if (_dragSrc === globalIdx) {
+              // Tap same tile - deselect
+              _dragSrc = null;
+              renderSettingsGrid();
+            } else {
+              // Second tap - swap with selected tile
+              const tmp = LETTERS[_dragSrc];
+              LETTERS[_dragSrc] = LETTERS[globalIdx];
+              LETTERS[globalIdx] = tmp;
+              _dragSrc = null;
+              renderSettingsGrid();
+            }
+          });
+
+          lettersDiv.appendChild(tile);
+        });
+        row.appendChild(lettersDiv);
+        grid.appendChild(row);
+      }
+    }
+
+    function saveLetterOrder() {
+      try {
+        localStorage.setItem('letterSounds_letterOrder', JSON.stringify(LETTERS));
+      } catch(e) {}
+      toast('Letter order saved!', 'green');
+      showHome();
+    }
+
+    function resetLetterOrder() {
+      LETTERS.splice(0, LETTERS.length, ...DEFAULT_LETTERS);
+      try { localStorage.removeItem('letterSounds_letterOrder'); } catch(e) {}
+      renderSettingsGrid();
+      toast('Reset to default order', 'red');
+    }
+
+    // ========================================================
+    // TEACHER NOTES
+    // ========================================================
+    function saveNote() {
+      const student = currentStudent();
+      if (!student) return;
+      const input = document.getElementById('notes-input');
+      const text  = input.value.trim();
+      if (!text) return;
+
+      if (!student.notes) student.notes = [];
+      student.notes.unshift({
+        text,
+        date: new Date().toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' }),
+        ts: Date.now()
+      });
+
+      saveState();
+      input.value = '';
+      renderNotes(student);
+    }
+
+    function deleteNote(ts) {
+      const student = currentStudent();
+      if (!student || !student.notes) return;
+      student.notes = student.notes.filter(n => n.ts !== ts);
+      saveState();
+      renderNotes(student);
+    }
+
+    function renderNotes(student) {
+      const log = document.getElementById('notes-log');
+      if (!log) return;
+      const notes = student.notes || [];
+      if (notes.length === 0) {
+        log.innerHTML = '';
+        return;
+      }
+      log.innerHTML = notes.map(n => `
+        <div class="note-entry">
+          <button class="note-delete" onclick="deleteNote(${n.ts})" title="Delete">✕</button>
+          <div class="note-entry-text">${escHtml(n.text)}</div>
+          <div class="note-entry-meta">${n.date}</div>
+        </div>`).join('');
+    }
+
+    // ========================================================
+    // PRINTABLE REPORT
+    // ========================================================
+    function printReport() {
+      const student = currentStudent();
+      if (!student) return;
+
+      const today_str = new Date().toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+      const pts       = calcPoints(student);
+      const pct       = Math.round((pts / MAX_POINTS) * 100);
+
+      // -- Letter status grid (frequency order) --
+      const gridCells = LETTERS.map(l => {
+        const s = student.scores[l];
+        const bg = s === 'known'    ? '#166534' :
+                   s === 'learning' ? '#92400e' : '#cbd5e1';
+        const fg = s === 'unseen'   ? '#475569' : '#fff';
+        return `<div style="width:32px;height:32px;border-radius:6px;background:${bg};color:${fg};
+          display:inline-flex;align-items:center;justify-content:center;
+          font-size:14px;font-weight:900;margin:2px;font-family:sans-serif">${l}</div>`;
+      }).join('');
+
+      // -- Set rows for Right Now --
+      const GRAD = ['#dc2626','#c2410c','#ea580c','#ca8a04','#65a30d','#16a34a','#166534'];
+      let setRowsHtml = '';
+      for (let i = 0; i < LETTERS.length; i += SET_SIZE) {
+        const setLetters = LETTERS.slice(i, i + SET_SIZE);
+        const setNum = Math.floor(i / SET_SIZE) + 1;
+        const cells = setLetters.map(l => {
+          const idx  = letterColorIndex(student, l);
+          const days = passedDays(student, l);
+          const bg   = idx === null ? '#e2e8f0' : GRAD[idx];
+          const fg   = idx === null ? '#94a3b8' : '#fff';
+          const badge = idx === null ? '' : `<span style="font-size:7px;opacity:.8">${idx<6?days+'/3':'✓'}</span>`;
+          return `<div style="width:36px;height:36px;border-radius:6px;background:${bg};color:${fg};
+            display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+            margin:2px;font-size:13px;font-weight:900;font-family:sans-serif;gap:1px">${l}${badge}</div>`;
+        }).join('');
+        setRowsHtml += `<div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
+          <span style="font-size:10px;font-weight:800;color:#64748b;width:36px;text-transform:uppercase;letter-spacing:.05em">Set ${setNum}</span>
+          <div>${cells}</div>
+        </div>`;
+      }
+
+      // -- History per set --
+      let histHtml = '';
+      for (let i = 0; i < LETTERS.length; i += SET_SIZE) {
+        const setLetters = LETTERS.slice(i, i + SET_SIZE);
+        const setNum = Math.floor(i / SET_SIZE) + 1;
+        const rows = setLetters.map(l => {
+          const resps = (student.responses || {})[l] || [];
+          const score = student.scores[l];
+          const known = score === 'known';
+          if (resps.length === 0) {
+            return `<tr><td style="font-size:16px;font-weight:900;width:32px;text-align:center;
+              padding:4px 8px;border-radius:5px;background:#e2e8f0;color:#475569">${l}</td>
+              <td style="padding:4px 8px;font-size:11px;color:#94a3b8;font-style:italic">Not yet seen</td></tr>`;
+          }
+          const correct = resps.filter(r => r.outcome === 'correct').length;
+          const wrong   = resps.filter(r => r.outcome !== 'correct').length;
+          const dots = resps.map(r => {
+            const c = r.outcome==='correct' ? '#16a34a' : r.outcome==='provided' ? '#ea580c' : '#dc2626';
+            return `<span style="display:inline-block;width:9px;height:9px;border-radius:50%;background:${c};margin:1px"></span>`;
+          }).join('');
+          const badgeBg = known ? '#166534' : '#1e3a5f';
+          return `<tr style="border-bottom:1px solid #f1f5f9">
+            <td style="padding:5px 8px">
+              <div style="width:32px;height:32px;border-radius:6px;background:${badgeBg};color:#fff;
+                display:inline-flex;align-items:center;justify-content:center;
+                font-size:16px;font-weight:900;font-family:sans-serif">${l}</div>
+            </td>
+            <td style="padding:5px 8px;font-size:11px;font-weight:700;color:#dc2626;white-space:nowrap">✗ ${wrong}</td>
+            <td style="padding:5px 8px;font-size:11px;font-weight:700;color:#16a34a;white-space:nowrap">✓ ${correct}</td>
+            <td style="padding:5px 8px">${dots}</td>
+          </tr>`;
+        }).join('');
+        histHtml += `<div style="margin-bottom:16px">
+          <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
+            color:#7c3aed;border-bottom:2px solid #ede9fe;padding-bottom:4px;margin-bottom:6px">Set ${setNum}</div>
+          <table style="width:100%;border-collapse:collapse">${rows}</table>
+        </div>`;
+      }
+
+      // -- Gradient key --
+      const gradKey = GRAD.map(c =>
+        `<div style="flex:1;height:14px;background:${c}"></div>`
+      ).join('');
+
+      // -- Inject into in-page print container & print --
+      const container = document.getElementById('print-container');
+      container.innerHTML = `
+        <style>
+          * { box-sizing:border-box; margin:0; padding:0; }
+          #print-container { font-family: system-ui, sans-serif; color:#1a2340; padding:32px; max-width:800px; margin:0 auto; }
+          h1 { font-size:22px; font-weight:900; color:#7c3aed; }
+          h2 { font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#5a6484; margin:22px 0 8px; }
+          .meta { font-size:12px; color:#94a3b8; margin-top:3px; }
+          .summary { display:flex; gap:16px; margin-top:12px; margin-bottom:4px; }
+          .sum-box { flex:1; padding:12px 16px; border-radius:10px; text-align:center; }
+          .sum-box span { display:block; font-size:24px; font-weight:900; }
+          .sum-box label { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:#5a6484; }
+          table { width:100%; border-collapse:collapse; }
+          .no-print { display:none; }
+          @media print { .no-print { display:none !important; } }
+      
+    /* -- TEACHER NOTES -- */
+    .notes-section {
+      background: var(--surface2); border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 20px;
+      border: 2px solid var(--border);
+    }
+    .notes-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .notes-label {
+      font-size: .8rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: #d8d8f0;
+    }
+    .btn-notes-save {
+      padding: 6px 14px; background: var(--accent);
+      border: none; border-radius: 8px;
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 800;
+      color: #fff; cursor: pointer; transition: opacity .2s;
+    }
+    .btn-notes-save:hover { opacity: .85; }
+    .notes-input {
+      width: 100%; background: #12122a; border: 1.5px solid var(--border);
+      border-radius: 10px; padding: 10px 12px;
+      font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 500;
+      color: var(--text); resize: none; outline: none;
+      transition: border-color .2s; line-height: 1.5;
+    }
+    .notes-input::placeholder { color: var(--soft); }
+    .notes-input:focus { border-color: var(--accent); }
+
+    /* Log of saved notes */
+    .notes-log { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
+    .note-entry {
+      background: #12122a; border-radius: 10px;
+      padding: 10px 12px; border-left: 3px solid var(--accent);
+      position: relative;
+    }
+    .note-entry-text { font-size: .88rem; font-weight: 500; color: var(--text); line-height: 1.5; }
+    .note-entry-meta { font-size: .7rem; color: var(--soft); font-weight: 600; margin-top: 4px; }
+    .note-delete {
+      position: absolute; top: 8px; right: 8px;
+      background: none; border: none; color: var(--soft);
+      font-size: .8rem; cursor: pointer; padding: 2px 6px;
+      border-radius: 6px; transition: color .2s;
+    }
+    .note-delete:hover { color: var(--red); }
+
+
+    /* -- SETTINGS BUTTON on home -- */
+    .btn-settings {
+      margin-top: 14px; padding: 8px 18px;
+      background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.3);
+      border-radius: 100px; color: rgba(255,255,255,.85);
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 700;
+      cursor: pointer; transition: background .2s;
+      letter-spacing: .04em;
+    }
+    .btn-settings:hover { background: rgba(255,255,255,.25); }
+
+    /* -- SETTINGS SCREEN -- */
+    .settings-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .settings-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .settings-title { font-size: 1.2rem; font-weight: 900; color: #fff; flex: 1; }
+    .settings-desc {
+      font-size: .85rem; color: var(--soft); font-weight: 600;
+      line-height: 1.5; margin-bottom: 20px;
+    }
+
+    /* Drag-and-drop letter grid */
+    .settings-grid {
+      display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px;
+    }
+    .settings-set-row {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .settings-set-num {
+      font-size: .65rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .07em; color: var(--soft); width: 36px; flex-shrink: 0;
+      text-align: center;
+    }
+    .settings-letters { display: flex; flex-wrap: wrap; gap: 6px; }
+    .drag-tile {
+      width: 42px; height: 42px; border-radius: 10px;
+      background: linear-gradient(135deg, #7c3aed, #9b5de5);
+      color: #fff; font-size: 1.2rem; font-weight: 900;
+      display: flex; align-items: center; justify-content: center;
+      cursor: grab; user-select: none;
+      transition: transform .15s, box-shadow .15s, opacity .15s;
+      box-shadow: 0 2px 8px rgba(124,58,237,.3);
+      touch-action: none;
+    }
+    .drag-tile:active { cursor: grabbing; transform: scale(1.08); box-shadow: 0 6px 18px rgba(124,58,237,.5); }
+    .drag-tile.dragging { opacity: .45; transform: scale(0.95); }
+    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #c77dff; }
+
+    .settings-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
+    .settings-note { font-size: .75rem; color: var(--soft); font-weight: 600; text-align: center; line-height: 1.5; }
+
+
+
+
+    /* -- DASHBOARD NAME ROW -- */
+    .dash-name-row { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 0; }
+    .dash-icon { font-size: 1.5rem; line-height: 1; }
+    .dash-name-row h2 { font-size: 1.2rem; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .btn-cust-small {
+      background: rgba(255,255,255,.15); border: 1.5px solid rgba(255,255,255,.25);
+      border-radius: 8px; width: 28px; height: 28px; font-size: .85rem;
+      cursor: pointer; color: #fff; flex-shrink: 0;
+      transition: background .2s;
+    }
+    .btn-cust-small:hover { background: rgba(255,255,255,.28); }
+
+    /* -- CUSTOMIZE SCREEN -- */
+    .cust-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .cust-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .cust-title  { font-size: 1.2rem; font-weight: 900; color: #fff; }
+    .cust-student-name { font-size: .95rem; font-weight: 700; color: var(--soft); margin-bottom: 16px; text-align: center; }
+
+    .cust-preview {
+      display: flex; justify-content: center; margin-bottom: 22px;
+    }
+    .cust-preview-icon {
+      width: 80px; height: 80px; border-radius: 50%;
+      background: var(--surface2); border: 3px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2.8rem; line-height: 1;
+      transition: border-color .3s;
+    }
+
+    .cust-section-label {
+      font-size: .75rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--soft); margin-bottom: 10px;
+    }
+
+    .cust-icons {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 22px;
+    }
+    .cust-icon-btn {
+      width: 44px; height: 44px; border-radius: 12px;
+      background: var(--surface2); border: 2px solid var(--border);
+      font-size: 1.4rem; cursor: pointer;
+      transition: border-color .15s, transform .1s;
+    }
+    .cust-icon-btn:hover  { border-color: var(--accent); }
+    .cust-icon-btn:active { transform: scale(.92); }
+    .cust-icon-btn.selected { border-color: #fbbf24; background: #2a2000; }
+
+    .cust-colors {
+      display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 28px;
+    }
+    .cust-color-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 3px solid transparent; cursor: pointer;
+      transition: transform .1s, border-color .15s;
+    }
+    .cust-color-btn:hover  { transform: scale(1.1); }
+    .cust-color-btn:active { transform: scale(.93); }
+    .cust-color-btn.selected { border-color: #fff; transform: scale(1.12); }
+
+    .cust-actions { margin-bottom: 8px; }
+
+    /* Student list icon */
+    .student-icon { font-size: 1.1rem; margin-right: 2px; }
+
+
+    /* -- QR CODE SECTION -- */
+    .qr-section {
+      background: none; border-radius: 10px;
+      padding: 8px 4px; margin-top: 12px;
+      border: none; opacity: .75; transition: opacity .2s;
+    }
+    .qr-section:hover { opacity: 1; }
+    .qr-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 6px;
+    }
+    .qr-label {
+      font-size: .7rem; font-weight: 600;
+      letter-spacing: .04em; color: var(--soft);
+    }
+    .btn-qr-edit {
+      background: none; border: 1.5px solid var(--border);
+      border-radius: 8px; padding: 4px 10px;
+      font-family: 'Teachers', sans-serif; font-size: .75rem;
+      font-weight: 700; color: var(--soft); cursor: pointer;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-qr-edit:hover { border-color: var(--accent); color: var(--accent); }
+    .qr-edit-row {
+      display: flex; gap: 8px; margin-bottom: 12px;
+    }
+    .qr-url-input {
+      flex: 1; padding: 8px 12px;
+      background: #12122a; border: 1.5px solid var(--border);
+      border-radius: 8px; font-family: 'Teachers', sans-serif;
+      font-size: .8rem; font-weight: 500; color: var(--text); outline: none;
+      transition: border-color .2s;
+    }
+    .qr-url-input:focus { border-color: var(--accent); }
+    .btn-qr-save {
+      padding: 8px 14px; background: var(--accent); color: #fff;
+      border: none; border-radius: 8px;
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 800;
+      cursor: pointer;
+    }
+    .qr-body { display: flex; align-items: center; gap: 16px; }
+    .qr-code {
+      flex-shrink: 0; background: #fff; border-radius: 10px;
+      padding: 8px; display: inline-block;
+    }
+    .qr-code canvas, .qr-code img { display: block; border-radius: 4px; }
+    .qr-url-display { display: none; }
+
+
+    .btn-customize-link {
+      background: none; border: none; padding: 4px 0 12px;
+      font-family: 'Teachers', sans-serif; font-size: .78rem;
+      font-weight: 700; color: var(--soft); cursor: pointer;
+      letter-spacing: .02em; text-align: left;
+      transition: color .2s;
+    }
+    .btn-customize-link:hover { color: var(--accent2); }
+
+
+    /* -- HOME section row -- */
+    .home-section-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+    .home-section-row .section-heading { margin-bottom: 0; }
+    .btn-class-view {
+      padding: 7px 14px; background: var(--surface2);
+      border: 2px solid var(--border); border-radius: var(--radius);
+      font-family: 'Teachers', sans-serif; font-size: .8rem; font-weight: 700;
+      color: var(--soft); cursor: pointer; white-space: nowrap;
+      transition: border-color .2s, color .2s;
+    }
+    .btn-class-view:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* -- CLASS VIEW SCREEN -- */
+    .class-topbar {
+      display: flex; align-items: center; gap: 12px;
+      background: linear-gradient(135deg, #7c3aed, #c77dff);
+      margin: -24px -20px 22px; padding: 20px;
+      border-radius: 0 0 24px 24px;
+    }
+    .class-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
+    .class-title { font-size: 1.2rem; font-weight: 900; color: #fff; flex: 1; }
+
+    /* By Letter grid */
+    .class-letter-section { margin-bottom: 20px; }
+    .class-set-label {
+      font-size: .72rem; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--accent2);
+      border-bottom: 1px solid var(--border); padding-bottom: 4px; margin-bottom: 10px;
+    }
+    .class-letter-row {
+      display: flex; align-items: center; gap: 10px; margin-bottom: 8px;
+    }
+    .class-letter-badge {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 900; color: #fff;
+      font-family: 'Teachers', sans-serif;
+    }
+    .class-bar-wrap { flex: 1; }
+    .class-bar-labels {
+      display: flex; justify-content: space-between;
+      font-size: .65rem; font-weight: 700; color: var(--soft); margin-bottom: 3px;
+    }
+    .class-bar-track {
+      height: 12px; background: var(--surface2); border-radius: 100px; overflow: hidden;
+      display: flex;
+    }
+    .class-bar-known    { background: #166534; height: 100%; transition: width .4s; }
+    .class-bar-learning { background: #92400e; height: 100%; transition: width .4s; }
+    .class-bar-unseen   { background: #2e2e4a; height: 100%; }
+    .class-bar-stat {
+      font-size: .68rem; font-weight: 700; color: var(--soft);
+      white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right;
+    }
+
+    /* By Student grid */
+    .class-student-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--border);
+    }
+    .class-student-row:last-child { border-bottom: none; }
+    .class-student-icon { font-size: 1.2rem; flex-shrink: 0; }
+    .class-student-name { font-size: .9rem; font-weight: 800; width: 90px; flex-shrink: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .class-mini-bar { flex: 1; height: 10px; background: var(--surface2); border-radius: 100px; overflow: hidden; display: flex; }
+    .class-pts-label { font-size: .7rem; font-weight: 700; color: var(--soft); min-width: 52px; text-align: right; flex-shrink: 0; }
+
+    /* Needs attention */
+    .needs-card {
+      background: var(--surface2); border-radius: 14px; padding: 14px 16px;
+      border: 2px solid var(--border); margin-bottom: 10px;
+    }
+    .needs-card.urgent { border-color: var(--red); }
+    .needs-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .needs-student-name { font-size: 1rem; font-weight: 800; flex: 1; }
+    .needs-badge {
+      font-size: .7rem; font-weight: 800; padding: 3px 10px;
+      border-radius: 100px; white-space: nowrap;
+    }
+    .needs-badge.days   { background: var(--red-bg); color: var(--red-dk); }
+    .needs-badge.slow   { background: var(--amber-bg); color: var(--amber-dk); }
+    .needs-struggling { display: flex; flex-wrap: wrap; gap: 5px; }
+    .needs-chip {
+      padding: 3px 10px; border-radius: 100px; font-size: .82rem; font-weight: 900;
+      background: var(--red-bg); color: var(--red-dk);
+    }
+    .class-empty {
+      text-align: center; padding: 32px 16px;
+      font-size: .95rem; font-weight: 600; color: var(--soft);
+    }
+
+  </style>
+
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #7c3aed;padding-bottom:14px;margin-bottom:20px">
+          <div>
+            <h1>Letter Sounds Report</h1>
+            <div class="meta">${student.name} &nbsp;·&nbsp; ${today_str}</div>
+          </div>
+          <div style="text-align:right">
+            <div style="font-size:28px;font-weight:900;color:#7c3aed">${pts} pts</div>
+            <div style="font-size:10px;color:#94a3b8;font-weight:700">of 520 &nbsp;·&nbsp; ${pct}% mastered</div>
+          </div>
+        </div>
+
+        <div class="summary">
+          <div class="sum-box" style="background:#dcfce7;border:2px solid #22c55e">
+            <span style="color:#166534">${LETTERS.filter(l=>student.scores[l]==='known').length}</span>
+            <label>Known</label>
+          </div>
+          <div class="sum-box" style="background:#fef3c7;border:2px solid #f59e0b">
+            <span style="color:#92400e">${LETTERS.filter(l=>student.scores[l]==='learning').length}</span>
+            <label>Practicing</label>
+          </div>
+          <div class="sum-box" style="background:#f1f5f9;border:2px solid #cbd5e1">
+            <span style="color:#64748b">${LETTERS.filter(l=>student.scores[l]==='unseen').length}</span>
+            <label>Not Yet Seen</label>
+          </div>
+        </div>
+
+        <h2>Letter Status</h2>
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#5a6484">
+            <span style="width:12px;height:12px;border-radius:3px;background:#166534;display:inline-block"></span>Known</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#5a6484">
+            <span style="width:12px;height:12px;border-radius:3px;background:#92400e;display:inline-block"></span>Practicing</span>
+          <span style="display:inline-flex;align-items:center;gap:4px;font-size:10px;font-weight:700;color:#5a6484">
+            <span style="width:12px;height:12px;border-radius:3px;background:#cbd5e1;display:inline-block"></span>Not seen</span>
+        </div>
+        <div>${gridCells}</div>
+
+        <h2>Accuracy Progress (Right Now)</h2>
+        <div style="display:flex;border-radius:6px;overflow:hidden;height:12px;margin-bottom:4px">${gradKey}</div>
+        <div style="display:flex;justify-content:space-between;font-size:9px;color:#94a3b8;font-weight:700;margin-bottom:12px">
+          <span>Many misses</span><span>Mastered</span>
+        </div>
+        ${setRowsHtml}
+
+        ${(student.notes && student.notes.length) ? '<h2 style="margin-top:28px">Teacher Notes</h2><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">' + student.notes.map(n => '<div style="padding:10px 12px;border-left:3px solid #7c3aed;background:#f5f3ff;border-radius:6px"><div style="font-size:12px;color:#1a2340">' + n.text + '</div><div style="font-size:10px;color:#94a3b8;margin-top:3px">' + n.date + '</div></div>').join('') + '</div>' : ''}
+
+        <h2 style="margin-top:28px">Response History</h2>
+        <div style="font-size:10px;font-weight:700;color:#5a6484;display:flex;gap:12px;margin-bottom:10px">
+          <span>🔴 Incorrect &nbsp; 🟠 Answer provided &nbsp; 🟢 Correct</span>
+        </div>
+        ${histHtml}
+      `;
+
+      // Trigger browser print dialog
+      window.print();
+
+      // Clean up after printing
+      window.addEventListener('afterprint', () => {
+        container.innerHTML = '';
+      }, { once: true });
+    }
+
+
+    // ========================================================
+    // DURATION PICKER
+    // ========================================================
+    function showDurationPicker() {
+      document.getElementById('duration-overlay').classList.add('visible');
+    }
+
+    function closeDurationPicker() {
+      document.getElementById('duration-overlay').classList.remove('visible');
+    }
+
+    function beginWithDuration(minutes) {
+      closeDurationPicker();
+      // Override the session seconds for this session
+      state.chosenDuration = minutes * 60;
+      startSession();
+    }
+
+    // ========================================================
+    // PAUSE / RESUME
+    // ========================================================
+    function pauseSession() {
+      const sess = state.session;
+      if (!sess || sess.paused) return;
+      sess.paused = true;
+
+      // Stop both timers
+      if (sess.timerInterval) { clearInterval(sess.timerInterval); sess.timerInterval = null; }
+      clearIdleTimer();
+
+      // Show pause overlay, hide prompt overlay if open
+      document.getElementById('prompt-overlay').classList.remove('visible');
+      document.getElementById('pause-overlay').classList.add('visible');
+    }
+
+    function finishSession() {
+      document.getElementById('pause-overlay').classList.remove('visible');
+      showResults();
+    }
+
+    function resumeSession() {
+      const sess = state.session;
+      if (!sess) return;
+      sess.paused = false;
+
+      document.getElementById('pause-overlay').classList.remove('visible');
+
+      // Restart the countdown from where it left off
+      startTimer();
+      // Restart the idle timer for the current card
+      startIdleTimer();
+    }
+
+    function stopTimer() {
+      if (state.session && state.session.timerInterval) {
+        clearInterval(state.session.timerInterval);
+        state.session.timerInterval = null;
+      }
+      clearIdleTimer();
+    }
+
+    function updateTimerUI(secs) {
+      if (secs < 0) secs = 0;
+      const mins    = Math.floor(secs / 60);
+      const s       = secs % 60;
+      const display = `${mins}:${String(s).padStart(2,'0')}`;
+      // Text
+      const textEl = document.getElementById('timer-text');
+      textEl.textContent = display;
+      textEl.className   = 'timer-text';
+
+      // SVG arc: offset goes from 0 (full) - CIRC (empty)
+      const arc    = document.getElementById('timer-arc');
+      const ratio  = secs / SESSION_SECS;
+      arc.style.strokeDashoffset = CIRC * (1 - ratio);
+      arc.className = 'timer-arc';
+    }
+
+    // ========================================================
+    // SESSION - RENDER CARD
+    // ========================================================
+    function renderCard() {
+      const sess    = state.session;
+      const student = currentStudent();
+
+      // If we've finished this pass through the queue, rebuild it.
+      // buildQueue always front-loads 'learning' letters, so missed
+      // letters (which get demoted to 'learning') naturally reappear
+      // at the front of the next set.
+      if (sess.cardIndex >= sess.queue.length) {
+        sess.queue     = buildQueue(student);
+        sess.cardIndex = 0;
+        // Reset dot progress display for the new pass
+        sess.setProgress = {};
+        sess.queue.forEach(l => sess.setProgress[l] = null);
+      }
+
+      const letter = sess.queue[sess.cardIndex];
+
+      // Flip animation
+      const card = document.getElementById('flashcard');
+      card.classList.remove('flip');
+      void card.offsetWidth; // force reflow to restart animation
+      card.classList.add('flip');
+      const cardEl = document.getElementById('card-letter');
+      cardEl.textContent = letter;
+      // Some letters look better in Urbanist (straight k, etc.)
+      // Use Edu NSW for all others (good q tail, clean t, simple i, print a)
+      const urbanistLetters = new Set(['k']);
+      cardEl.style.fontFamily = urbanistLetters.has(letter)
+        ? "'Teachers', sans-serif"
+        : "'Teachers', sans-serif";
+
+      // Record when this card was shown (for sub-1-second detection)
+      sess.cardShownAt = Date.now();
+
+      // Start 5-second idle timer for this card
+      startIdleTimer();
+    }
+
+
+    // ========================================================
+    // SESSION - 5-SECOND IDLE TIMER
+    // If no button is tapped for 5s, show the prompt overlay.
+    // ========================================================
+
+    let _idleTimer  = null;
+
+    function startIdleTimer() {
+      clearIdleTimer();
+      _idleTimer = setTimeout(() => {
+        const letter = state.session.queue[state.session.cardIndex];
+        document.getElementById('prompt-sound').textContent = letter;
+        document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
+        _promptMode = 'idle';
+        document.getElementById('prompt-overlay').classList.add('visible');
+        // Pause the main session timer
+        if (state.session && state.session.timerInterval) {
+          clearInterval(state.session.timerInterval);
+          state.session.timerInterval = null;
+        }
+      }, IDLE_SECS * 1000);
+    }
+
+    function clearIdleTimer() {
+      if (_idleTimer) { clearTimeout(_idleTimer); _idleTimer = null; }
+    }
+
+
+    // Tracks whether the prompt overlay is showing for incorrect vs idle
+    let _promptMode = 'idle'; // 'idle' or 'incorrect'
+    let _promptLetter = null;
+
+    // Single handler called by the Done button — routes based on mode
+    function handlePromptDone() {
+      // Hide the overlay
+      document.getElementById('prompt-overlay').classList.remove('visible');
+      // Reset display to defaults
+      document.getElementById('prompt-cta').textContent = 'What sound?';
+      document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
+      // Resume timer
+      if (state.session && !state.session.timerInterval) startTimer();
+      // Process the card based on how overlay was triggered
+      const mode = _promptMode;
+      _promptMode = 'idle';
+      if (mode === 'incorrect') {
+        respond('incorrect_confirmed'); // bypass the overlay — already reviewed
+      } else {
+        respond('provided');
+      }
+    }
+
+    // Not used as onclick — kept for any internal calls
+    function confirmProvided() { handlePromptDone(); }
+
+    // ========================================================
+    // SESSION - RESPOND  ('correct' | 'incorrect' | 'provided')
+    // ========================================================
+    function respond(outcome) {
+      clearIdleTimer();
+
+      const sess    = state.session;
+      // Guard: if session already ended (timer ran out), do nothing
+      if (!sess || sess.secsLeft <= 0) return;
+      const student = currentStudent();
+      const letter  = sess.queue[sess.cardIndex];
+
+      // For 'incorrect', show the review overlay — processing happens after Done is tapped
+      if (outcome === 'incorrect') {
+        document.getElementById('prompt-sound').textContent = letter;
+        _promptLetter = letter;
+        _promptMode = 'incorrect';
+        document.getElementById('prompt-cta').textContent = 'Review this sound with the student, then tap Done.';
+        document.getElementById('prompt-done-btn').textContent = 'Done';
+        document.getElementById('prompt-overlay').classList.add('visible');
+        if (state.session && state.session.timerInterval) {
+          clearInterval(state.session.timerInterval);
+          state.session.timerInterval = null;
+        }
+        return; // wait for Done tap
+      }
+
+      // 'incorrect_confirmed' = same scoring as incorrect but overlay already dismissed
+      if (outcome === 'incorrect_confirmed') outcome = 'incorrect';
+
+      document.getElementById('prompt-overlay').classList.remove('visible');
+
+      // Track every letter that gets a response this session
+      sess.practicedLetters.add(letter);
+
+      // Log individual response for History tab
+      if (!student.responses)        student.responses = {};
+      if (!student.responses[letter]) student.responses[letter] = [];
+      student.responses[letter].push({ date: today(), outcome });
+
+      if (outcome === 'correct') {
+        sess.totalCorrect++;
+        sess.correctLetters.add(letter);
+        sess.setProgress[letter] = 'c';
+
+        // Advance the per-letter in-session streak
+        student.streak[letter] = (student.streak[letter] || 0) + 1;
+
+        // -- INSTANT MASTERY: letter must be answered correctly within 2 seconds,
+        //    2 times in a row, on its very first session (was 'unseen').
+        const responseTime  = Date.now() - (sess.cardShownAt || 0);
+        const wasUnseen     = student.scores[letter] === 'unseen' ||
+                              (student.scores[letter] === 'learning' &&
+                               ((student.history || {})[letter] || []).length === 0);
+
+        if (wasUnseen && responseTime <= 2000) {
+          // Count fast consecutive correct responses for this letter this session
+          sess.instantStreak[letter] = (sess.instantStreak[letter] || 0) + 1;
+
+          if (sess.instantStreak[letter] >= 2) {
+            // Two fast correct in a row on first meeting - promote to known!
+            student.scores[letter] = 'known';
+            const t = today();
+            if (!student.history[letter]) student.history[letter] = [];
+            for (let d = 0; d < DAYS_NEEDED; d++) {
+              student.history[letter].push({ date: t, passed: true });
+            }
+            injectNextUnseen(student, sess);
+          } else {
+            // First fast correct - move to learning, re-queue so they see it again soon
+            if (student.scores[letter] === 'unseen') {
+              student.scores[letter] = 'learning';
+            }
+            // Re-queue 2 cards ahead for the second attempt
+            const reinsertAt = Math.min(sess.cardIndex + 2, sess.queue.length);
+            sess.queue.splice(reinsertAt, 0, letter);
+            sess.setProgress[letter] = null;
+          }
+        } else {
+          // Too slow or not first meeting - reset instant streak, normal flow
+          sess.instantStreak[letter] = 0;
+          if (student.scores[letter] === 'unseen') {
+            student.scores[letter] = 'learning';
+          }
+        }
+        // NOTE: regular 'known' promotion also happens at end of session via recordDailyResults()
+
+      } else {
+        // Both 'incorrect' and 'provided' count as wrong for scoring/streaks
+        if (outcome === 'provided') {
+          sess.totalProvided++;
+          sess.providedLetters.add(letter);
+        } else {
+          sess.totalWrong++;
+          sess.wrongLetters.add(letter);
+        }
+        sess.setProgress[letter] = 'w';
+
+        // Reset in-session streak - student needs to prove it again
+        student.streak[letter] = 0;
+        // Also reset instant mastery streak
+        if (sess.instantStreak) sess.instantStreak[letter] = 0;
+
+        // Move to learning if unseen
+        if (student.scores[letter] === 'unseen') {
+          student.scores[letter] = 'learning';
+        }
+
+        // Re-queue the letter 2-3 cards later
+        const reinsertAt = Math.min(sess.cardIndex + 3, sess.queue.length);
+        sess.queue.splice(reinsertAt, 0, letter);
+        sess.setProgress[letter] = null;
+      }
+
+      saveState();
+      sess.cardIndex++;
+      renderCard();
+    }
+
+    // ========================================================
+    // SESSION - END EARLY
+    // ========================================================
+    function endSession() {
+      stopTimer();
+      showResults();
+    }
+
+    // ========================================================
+    // RESULTS
+    // ========================================================
+    function showResults() {
+      stopTimer();
+      clearIdleTimer();
+      // Dismiss any overlays that might be showing
+      document.getElementById('prompt-overlay').classList.remove('visible');
+      document.getElementById('pause-overlay').classList.remove('visible');
+      const student = currentStudent();
+      // Snapshot points before recording so we can show the delta
+      const ptsEarned = recordDailyResults(); // lock in results, returns session points
+      recordPracticeDay();  // mark today as a practiced day for the streak
+      saveState();
+      const sess = state.session;
+      if (!sess) { showDashboard(); return; }
+
+      const total = sess.totalCorrect + sess.totalWrong + sess.totalProvided;
+      const pct   = total > 0 ? sess.totalCorrect / total : 0;
+      const emoji = pct >= .85 ? '🌟' : pct >= .60 ? '👍' : '💪';
+
+      document.getElementById('res-emoji').textContent  = emoji;
+      document.getElementById('res-name').textContent   = student ? student.name : '';
+
+      // Points celebration
+      const ptsNow = student ? calcPoints(student) : 0;
+
+      // Draw results pie
+      (() => {
+        const ratio = Math.min(1, ptsNow / MAX_POINTS);
+        const cx=45, cy=45, r=44;
+        const angle = ratio * 2 * Math.PI;
+        const x = cx + r * Math.sin(angle), y = cy - r * Math.cos(angle);
+        const largeArc = angle > Math.PI ? 1 : 0;
+        const d = ratio >= 1
+          ? `M${cx},${cy} m-${r},0 a${r},${r} 0 1,1 ${r*2},0 a${r},${r} 0 1,1 -${r*2},0`
+          : ratio <= 0 ? `M${cx},${cy}`
+          : `M${cx},${cy} L${cx},${cy-r} A${r},${r} 0 ${largeArc},1 ${x},${y} Z`;
+        document.getElementById('res-pie').setAttribute('d', d);
+        document.getElementById('res-pie-pct').textContent = Math.round(ratio * 100) + '%';
+        // Tint pie gradient to student colour
+        if (student) {
+          const g = document.getElementById('resPieGrad');
+          if (g) {
+            g.querySelector('stop:first-child').setAttribute('stop-color', student.color || '#7c3aed');
+            g.querySelector('stop:last-child').setAttribute('stop-color', shiftColor(student.color || '#7c3aed', 40));
+          }
+        }
+      })();
+
+      const ptsEl = document.getElementById('res-pts-earned');
+      ptsEl.textContent = ptsEarned;
+      ptsEl.classList.toggle('has-points', ptsEarned > 0);
+      document.getElementById('res-pts-total').innerHTML =
+        `Total: <strong>${ptsNow} / ${MAX_POINTS} pts</strong> - ${Math.round((ptsNow/MAX_POINTS)*100)}% to full mastery`;
+
+      // Swap confetti/emoji based on points earned
+      const confettiEl = document.getElementById('res-confetti');
+      if (ptsEarned >= 20)      confettiEl.textContent = '🎉 🏆 🎉';
+      else if (ptsEarned >= 10) confettiEl.textContent = '🌟 🏅 🌟';
+      else if (ptsEarned > 0)   confettiEl.textContent = '⭐ ⭐ ⭐';
+      else                      confettiEl.textContent = '💪 💪 💪';
+
+      // Confetti burst when points earned
+      if (ptsEarned > 0) {
+        const cel = document.querySelector('.points-celebration');
+        const colors = ['#9b5de5','#c77dff','#22c55e','#fbbf24','#f472b6','#60a5fa'];
+        for (let i = 0; i < 28; i++) {
+          const p = document.createElement('div');
+          p.className = 'confetti-piece';
+          p.style.cssText = `
+            left:${10 + Math.random()*80}%;
+            top:${Math.random()*20}%;
+            background:${colors[Math.floor(Math.random()*colors.length)]};
+            width:${6+Math.random()*6}px; height:${6+Math.random()*6}px;
+            border-radius:${Math.random()>.5?'50%':'2px'};
+            animation-duration:${0.8+Math.random()*1}s;
+            animation-delay:${Math.random()*0.4}s;
+          `;
+          cel.appendChild(p);
+          p.addEventListener('animationend', () => p.remove());
+        }
+      }
+
+      document.getElementById('breakdown').innerHTML = '';
+
+      showScreen('screen-results');
+    }
+
+    // ========================================================
+    // RESET
+    // ========================================================
+    function confirmReset() {
+      const s = currentStudent();
+      if (!s) return;
+      const fresh = freshScores();
+      s.scores       = fresh.scores;
+      s.streak       = fresh.streak;
+      s.history      = fresh.history;
+      s.responses    = fresh.responses;
+      s.practiceDays = [];
+      // Notes are kept on reset - teacher observations shouldn't be lost
+      saveState();
+      renderDashboard(s);
+      toast('Progress reset', 'red');
+    }
+
+    // ========================================================
+    // UTILITIES
+    // ========================================================
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    function escHtml(str) {
+      return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+    }
+    let _toastTimer;
+    function toast(msg, color) {
+      let el = document.getElementById('_toast');
+      if (!el) {
+        el = document.createElement('div');
+        el.id = '_toast';
+        el.className = 'toast';
+        document.body.appendChild(el);
+      }
+      el.textContent  = msg;
+      el.className    = `toast ${color} show`;
+      clearTimeout(_toastTimer);
+      _toastTimer = setTimeout(() => el.classList.remove('show'), 1100);
+    }
+
+
+    // ========================================================
+    // QR CODE
+    // ========================================================
+    const QR_STORE = 'letterSounds_qrUrl';
+
+    function getQrUrl() {
+      return localStorage.getItem(QR_STORE) ||
+             'https://heathmck-a11y.github.io/soundfluency/';
+    }
+
+    function renderQrCode() {
+      const url = getQrUrl();
+      const container = document.getElementById('qr-code');
+      container.innerHTML = '';
+      if (typeof QRCode !== 'undefined') {
+        new QRCode(container, {
+          text:   url,
+          width:  64,
+          height: 64,
+          colorDark:  '#1a1a2e',
+          colorLight: '#ffffff',
+          correctLevel: QRCode.CorrectLevel.M
+        });
+      }
+      document.getElementById('qr-url-display').textContent = url;
+      document.getElementById('qr-url-input').value = url;
+    }
+
+    function toggleQrEdit() {
+      const row = document.getElementById('qr-edit-row');
+      const isHidden = row.style.display === 'none';
+      row.style.display = isHidden ? 'flex' : 'none';
+      document.getElementById('btn-qr-edit').textContent = isHidden ? 'Done' : 'Edit URL';
+    }
+
+    function saveQrUrl() {
+      const val = document.getElementById('qr-url-input').value.trim();
+      if (!val) return;
+      localStorage.setItem(QR_STORE, val);
+      toggleQrEdit();
+      renderQrCode();
+      toast('URL saved!', 'green');
+    }
+
+    // ========================================================
+    // PERSISTENCE - load / save from localStorage
+    // ========================================================
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORE);
+        if (raw) {
+          state.students = JSON.parse(raw).students || [];
+          // Back-fill any fields added in later versions
+          state.students.forEach(s => {
+            if (!s.history)      s.history = {};
+            if (!s.responses)    s.responses = {};
+            if (!s.practiceDays) s.practiceDays = [];
+            if (!s.notes)        s.notes = [];
+            if (!s.icon)         s.icon  = '⭐';
+            if (!s.color)        s.color = '#9b5de5';
+            LETTERS_ALPHA.forEach(l => {
+              if (!s.history[l])   s.history[l]   = [];
+              if (!s.responses[l]) s.responses[l] = [];
+            });
+          });
+        }
+      } catch(e) { console.warn('Load failed', e); }
+    }
+
+    function saveState() {
+      try {
+        localStorage.setItem(STORE, JSON.stringify({ students: state.students }));
+      } catch(e) { console.warn('Save failed', e); }
+    }
+
+    // ========================================================
+    // BOOT
+    // ========================================================
+    loadState();
+    renderQrCode();
+    showHome();
+
+    function showInfo() {
+      document.getElementById('info-modal').style.display = 'flex';
+    }
+    function hideInfo() {
+      document.getElementById('info-modal').style.display = 'none';
+    }
+    document.getElementById('info-modal').addEventListener('click', function(e) {
+      if (e.target === this) hideInfo();
+    });
+  </script>
+
+  <!-- Info modal -->
+  <div id="info-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#1e1e3a;border:2px solid #4e4e80;border-radius:20px;max-width:480px;width:100%;padding:28px 24px;position:relative;max-height:90vh;overflow-y:auto;">
+      <button onclick="hideInfo()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#9090b8;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
+      <h2 style="font-family:'Teachers',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 16px;">How Letter Sounds Works</h2>
+
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+        <strong style="color:#fff;">Letter Sounds</strong> is a fluency tracker for K–2 students learning letter-sound correspondences. It uses spaced practice across days to build lasting memory.
+      </p>
+
+      <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">How a session works</h3>
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+        Each session shows a student a set of letters on flashcards. Tap <strong style="color:#fff;">✓ Correct</strong> if they say the sound right, <strong style="color:#fff;">✗ Wrong</strong> if they miss it, or <strong style="color:#fff;">Provided</strong> if you had to give them the answer. Missed letters are re-queued a few cards later so the student has to retrieve it again before the session ends.
+      </p>
+
+      <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Interleaving</h3>
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+        Instead of repeating one letter over and over, each session mixes up to 6 letters together in a shuffled order. This is called <strong style="color:#fff;">interleaving</strong> — it feels harder in the moment, but research shows it produces stronger, more flexible memory than blocked practice. Two already-mastered letters are also sprinkled into every session so retention doesn't fade.
+      </p>
+
+      <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Spaced repetition</h3>
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+        A letter moves from <em>Practicing</em> to <em>Known</em> only after a student passes it on <strong style="color:#fff;">3 separate days</strong>. The gaps between those days are the spacing — each time the student has to retrieve the sound after forgetting a little, the memory gets stronger. Cramming it all in one sitting doesn't produce the same lasting result.
+      </p>
+
+      <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Letter sets</h3>
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+        Letters are introduced in sets of 6. Students work on their current set until letters are mastered, then new letters are introduced. You can customize the order to match your school's scope &amp; sequence using the <strong style="color:#fff;">⚙ Letter Sets</strong> button.
+      </p>
+
+      <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Points &amp; the goal</h3>
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 4px;">
+        Students earn points each day they pass a letter. The goal of <strong style="color:#fff;">520 points</strong> means they've mastered all 26 letters across 3 days each — full alphabet fluency.
+      </p>
+
+      <p style="font-family:'Teachers',sans-serif;font-size:.85rem;color:#9090b8;line-height:1.6;margin:18px 0 0;text-align:center;">
+        Have feedback or suggestions? Email <a href="mailto:heathmck@gmail.com" style="color:#c77dff;">heathmck@gmail.com</a>
+      </p>
+      <button onclick="hideInfo()" style="margin-top:14px;width:100%;padding:12px;background:#7c3aed;border:none;border-radius:12px;color:#fff;font-family:'Teachers',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;">Got it</button>
+    </div>
+  </div>
+</body>
+</html>
