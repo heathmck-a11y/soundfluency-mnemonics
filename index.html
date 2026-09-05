@@ -1338,6 +1338,7 @@
   <!-- == PROMPT OVERLAY (idle timer + incorrect response) == -->
   <div id="prompt-overlay" class="prompt-overlay">
     <div class="prompt-box">
+      <img id="prompt-image" src="images/a.png" alt="a" style="width:75%;max-width:220px;object-fit:contain;margin-bottom:12px;">
       <p class="prompt-instruction">
         This is <span id="prompt-sound" class="prompt-slash-letter">a</span>.<br>
         <strong id="prompt-cta">What sound?</strong>
@@ -2932,6 +2933,8 @@
       _idleTimer = setTimeout(() => {
         const letter = state.session.queue[state.session.cardIndex];
         document.getElementById('prompt-sound').textContent = letter;
+        document.getElementById('prompt-image').src = `images/${letter}.png`;
+        document.getElementById('prompt-image').alt = letter;
         document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
         _promptMode = 'idle';
         document.getElementById('prompt-overlay').classList.add('visible');
