@@ -1646,7 +1646,7 @@
         li.innerHTML = `
           <div class="student-left" onclick="selectStudent('${student.id}')">
             <span class="student-name"><span class="student-icon">${student.icon||'⭐'}</span>${escHtml(student.name)}</span>
-            <span class="level-badge level-badge-${student.level||1}">Phase ${['I','II','III'][(student.level||1)-1]}</span>
+            <span class="level-badge level-badge-${student.level||1}">${['Phase I: Imagery','Phase II: Auditory','Phase III: Integration'][(student.level||1)-1]}</span>
 
           </div>
           <button class="btn-customize-inline" onclick="event.stopPropagation();state.currentStudentId='${student.id}';showCustomize()">✏</button>
