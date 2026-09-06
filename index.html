@@ -2985,6 +2985,8 @@
       const promptEl = document.getElementById('adult-prompt');
       if (phase === 1) {
         promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}</em></span>`;
+      } else if (phase === 2) {
+        promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       } else {
         promptEl.innerHTML = `Ask: <strong>"What sound?"</strong><br>Tap the correct button below.`;
       }
@@ -3011,9 +3013,9 @@
         const phase = (currentStudent().level || 1);
         const mnemonic = MNEMONICS[letter] || letter;
         document.getElementById('prompt-sound').textContent = phase === 1 ? mnemonic : letter;
-        document.getElementById('prompt-image').src = `images/hints/${letter}.png`;
+        document.getElementById('prompt-image').src = phase === 1 ? `images/hints/${letter}.png` : `images/${letter}.png`;
         document.getElementById('prompt-image').alt = letter;
-        document.getElementById('prompt-hint').textContent = HINTS[letter] || '';
+        document.getElementById('prompt-hint').textContent = phase === 1 ? (HINTS[letter] || '') : '';
         document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
         _promptMode = 'idle';
         document.getElementById('prompt-overlay').classList.add('visible');
