@@ -232,6 +232,10 @@
     .card-letter {
       width: 85%; height: 85%; object-fit: contain; user-select: none;
     }
+    .card-letter-text {
+      font-size: clamp(5rem, 22vw, 9rem); font-family: 'Teachers', sans-serif;
+      font-weight: 700; color: #1a1a2e; user-select: none; line-height: 1;
+    }
 
     /* Prompt */
     .adult-prompt {
@@ -1287,6 +1291,7 @@
     <div class="card-stage">
       <div id="flashcard" class="flashcard">
         <img id="card-letter" class="card-letter" src="images/a.png" alt="a">
+        <span id="card-letter-text" class="card-letter-text" hidden>a</span>
       </div>
     </div>
 
@@ -1882,6 +1887,7 @@
     }
 
     function buildQueue(student) {
+      if ((student.level||1) === 3) return shuffle([...LETTERS_ALPHA]);
       const learning = shuffle(LETTERS.filter(l => student.scores[l]==='learning'));
       const unseen   = LETTERS.filter(l => student.scores[l]==='unseen');
       const known    = shuffle(LETTERS.filter(l => student.scores[l]==='known'));
@@ -2975,20 +2981,31 @@
       card.classList.remove('flip');
       void card.offsetWidth; // force reflow to restart animation
       card.classList.add('flip');
-      const cardEl = document.getElementById('card-letter');
-      cardEl.src = `images/${letter}.png`;
-      cardEl.alt = letter;
-
-      // Update teacher prompt based on phase
       const phase = (student.level || 1);
       const mnemonic = MNEMONICS[letter] || letter;
+
+      // Show image or text depending on phase
+      const cardImg  = document.getElementById('card-letter');
+      const cardText = document.getElementById('card-letter-text');
+      if (phase === 3) {
+        cardImg.hidden  = true;
+        cardText.hidden = false;
+        cardText.textContent = letter;
+      } else {
+        cardImg.hidden  = false;
+        cardText.hidden = true;
+        cardImg.src = `images/${letter}.png`;
+        cardImg.alt = letter;
+      }
+
+      // Update teacher prompt based on phase
       const promptEl = document.getElementById('adult-prompt');
       if (phase === 1) {
         promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}</em></span>`;
       } else if (phase === 2) {
         promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       } else {
-        promptEl.innerHTML = `Ask: <strong>"What sound?"</strong><br>Tap the correct button below.`;
+        promptEl.innerHTML = `Ask: <strong>"Tell me the picture, tell me the sound."</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       }
 
       // Record when this card was shown (for sub-1-second detection)
