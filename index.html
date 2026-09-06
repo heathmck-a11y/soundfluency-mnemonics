@@ -1347,6 +1347,7 @@
         <span id="prompt-intro">This is</span> <span id="prompt-sound" class="prompt-slash-letter">apple</span>.<br>
         <strong id="prompt-cta">What picture?</strong>
       </p>
+      <p id="prompt-hint" style="font-family:'Teachers',sans-serif;font-size:.82rem;color:#555;line-height:1.6;margin:8px 0 14px;text-align:left;"></p>
       <button class="btn-confirm" id="prompt-done-btn" onclick="handlePromptDone()">Done - answer provided</button>
     </div>
   </div>
@@ -1549,6 +1550,35 @@
       s: 'snake',       t: 'tall tower',    u: 'upside umbrella',
       v: 'v-neck vest', w: 'waves',         x: '?',
       y: 'yellow yarn', z: 'zig zag'
+    };
+
+    const HINTS = {
+      a: 'The apple is round and red. It fell off the tree, the stem broke, and the apple landed on the ground on its stem.',
+      b: "Children say, 'I need my bat and ball so I can play baseball. First I get my bat so I can hit my ball.",
+      c: 'The cat is catching a mouse. His mouth is open wide. The mouse is not inside.',
+      d: 'The dog is resting on the floor. His tail is high in the air. First we see his head, then we see his tail.',
+      e: "The explorer's hood wraps around his face and his jacket covers his arm. His mitten helps keep him warm. He loves to explore and echo.",
+      f: 'The fish has funny lips, a funny face, and a long body. The two fins help the fish steer.',
+      g: 'The glasses were left hanging on the edge of the table. They fell off. The temples became twisted.',
+      h: "The highchair has a high back and seat for a baby. On the floor we see the baby's toy.",
+      i: "The inchworm is standing very tall and still. His back legs help him not to move. He is interested in the insect. The insect doesn't see the inchworm and it flies away.",
+      j: 'The jumper raises her hands and pushes off the ground with her feet. As she jumps higher, she bends her knees to finish her jump. The ball is above her. She hopes she scores!',
+      k: "The kicker's hand is high in the air. She puts one foot on the ground. She sees the ball, and swings her leg from the hip. Her foot kicks the ball.",
+      l: 'Long legs plays basketball. His legs are so long that he reaches the hoop with ease.',
+      m: 'The mountain man lives on top of the mountain, which he loves to explore. First he goes down the mountain, back up the mountain, over the mountain, down the mountain, up the mountain again, then over and down the mountain. He is exhausted and stops to rest.',
+      n: 'The newt with a boot is really cute. She loves to do gymnastics. She lifts her boot in the air, stands on her nose, and swishes her tail to balance this pose.',
+      o: 'The octopus has a body that is very round.',
+      p: 'This is a plumbing pipe.',
+      q: 'This is a quilted queen.',
+      r: 'This is a reversing railroad.',
+      s: 'This is a slithering snake.',
+      t: 'This is a tall tower.',
+      u: 'This is an upside-down umbrella.',
+      v: 'This is a v-neck vest.',
+      w: 'This is a wild wave.',
+      x: '',
+      y: 'This is yellow yarn.',
+      z: 'This is a zigzag.'
     };
 
     const SESSION_SECS    = 2 * 60;  // default session length (overridden by duration picker)
@@ -2981,8 +3011,9 @@
         const phase = (currentStudent().level || 1);
         const mnemonic = MNEMONICS[letter] || letter;
         document.getElementById('prompt-sound').textContent = phase === 1 ? mnemonic : letter;
-        document.getElementById('prompt-image').src = `images/${letter}.png`;
+        document.getElementById('prompt-image').src = `images/hints/${letter}.png`;
         document.getElementById('prompt-image').alt = letter;
+        document.getElementById('prompt-hint').textContent = HINTS[letter] || '';
         document.getElementById('prompt-done-btn').textContent = 'Done - answer provided';
         _promptMode = 'idle';
         document.getElementById('prompt-overlay').classList.add('visible');
