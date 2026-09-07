@@ -3089,10 +3089,15 @@
 
       // For 'incorrect', show the review overlay — processing happens after Done is tapped
       if (outcome === 'incorrect') {
-        document.getElementById('prompt-sound').textContent = letter;
+        const phase = (student.level || 1);
+        const mnemonic = MNEMONICS[letter] || letter;
+        document.getElementById('prompt-sound').textContent = phase === 1 ? mnemonic : letter;
+        document.getElementById('prompt-image').src = phase === 1 ? `images/hints/${letter}.png` : `images/${letter}.png`;
+        document.getElementById('prompt-image').alt = letter;
+        document.getElementById('prompt-hint').textContent = phase === 1 ? (HINTS[letter] || '') : '';
         _promptLetter = letter;
         _promptMode = 'incorrect';
-        document.getElementById('prompt-cta').textContent = 'Review this sound with the student, then tap Done.';
+        document.getElementById('prompt-cta').textContent = 'Review with the student, then tap Done.';
         document.getElementById('prompt-done-btn').textContent = 'Done';
         document.getElementById('prompt-overlay').classList.add('visible');
         if (state.session && state.session.timerInterval) {
