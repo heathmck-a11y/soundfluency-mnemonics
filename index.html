@@ -351,8 +351,9 @@
     .prompt-overlay.visible { display: flex; }
     .prompt-box {
       background: #fff; border-radius: 24px;
-      padding: 28px 24px; max-width: 360px; width: 100%;
+      padding: 20px 24px; max-width: 360px; width: 100%;
       text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.4);
+      max-height: 88vh; overflow-y: auto;
     }
     .prompt-letter {
       font-size: 4.5rem; font-weight: 700; line-height: 1;
@@ -1347,7 +1348,7 @@
   <!-- == PROMPT OVERLAY (idle timer + incorrect response) == -->
   <div id="prompt-overlay" class="prompt-overlay">
     <div class="prompt-box">
-      <img id="prompt-image" src="images/a.png" alt="a" style="width:75%;max-width:220px;object-fit:contain;margin-bottom:12px;">
+      <img id="prompt-image" src="images/a.png" alt="a" style="width:75%;max-width:180px;max-height:180px;object-fit:contain;margin-bottom:10px;">
       <p class="prompt-instruction">
         <span id="prompt-intro">This is</span> <span id="prompt-sound" class="prompt-slash-letter">apple</span>.<br>
         <strong id="prompt-cta">What picture?</strong>
