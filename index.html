@@ -18,9 +18,9 @@
       --border:      #302020;
       --text:        #f5efee;
       --soft:        #9a8880;
-      --accent:      #fe6f5e;
-      --accent-dk:   #d94f3d;
-      --accent2:     #ffb8a8;
+      --accent:      #45b8e0;
+      --accent-dk:   #1e9dc8;
+      --accent2:     #a8dcf0;
       --green:       #22c55e;
       --green-dk:    #16a34a;
       --green-bg:    #14291e;
@@ -58,7 +58,7 @@
     /* ── HOME ── */
     .home-header {
       text-align: center;
-      background: linear-gradient(160deg, #d94f3d 0%, #fe6f5e 50%, #ffb8a8 100%);
+      background: linear-gradient(160deg, #1e9dc8 0%, #45b8e0 50%, #a8dcf0 100%);
       margin: -24px -20px 28px;
       padding: 48px 24px 40px;
       border-radius: 0 0 32px 32px;
@@ -90,16 +90,16 @@
     .student-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .student-item {
       display: flex; align-items: center; justify-content: space-between;
-      background: #f0e8e5; border: 2px solid #d4c0bc;
+      background: #e8f4fc; border: 2px solid #b8d8ec;
       border-radius: var(--radius); padding: 5px 16px;
       box-shadow: 0 2px 12px rgba(0,0,0,.15); transition: border-color .2s, box-shadow .2s; cursor: pointer;
     }
-    .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(217,79,61,.2); }
+    .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(30,157,200,.2); }
     .student-left  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1313; }
     .level-badge { font-size: .7rem; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: .05em; margin-top: 2px; display: inline-block; }
-    .level-badge-1 { background: #ffeae6; color: #d94f3d; }
-    .level-badge-2 { background: #ffe5e0; color: #e05c3d; }
+    .level-badge-1 { background: #e6f4fc; color: #1e9dc8; }
+    .level-badge-2 { background: #e6f4fc; color: #1e9dc8; }
     .level-badge-3 { background: #dcfce7; color: #166534; }
     .mini-pills    { display: flex; gap: 8px; flex-wrap: wrap; }
     .pill { font-size: .75rem; font-weight: 800; padding: 3px 10px; border-radius: 100px; }
@@ -112,7 +112,7 @@
       font-size: 1rem; cursor: pointer; padding: 4px 8px;
       border-radius: 8px; transition: color .2s, background .2s;
     }
-    .btn-customize-inline:hover { color: var(--accent); background: #fff2ee; }
+    .btn-customize-inline:hover { color: var(--accent); background: #f0f8fc; }
     .btn-delete {
       background: none; border: none; color: #9a8880;
       font-size: 1.1rem; cursor: pointer; padding: 4px 8px;
@@ -124,7 +124,7 @@
     /* ── DASHBOARD ── */
     .dash-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 24px;
       padding: 20px 20px 20px;
       border-radius: 0 0 24px 24px;
@@ -147,7 +147,7 @@
       display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 6px;
     }
     .points-label { font-size: .75rem; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: .06em; display: block; margin-bottom: 8px; }
-    .points-value { font-size: 1.6rem; font-weight: 900; color: #ffb8a8; line-height: 1; }
+    .points-value { font-size: 1.6rem; font-weight: 900; color: #a8dcf0; line-height: 1; }
     .bar-track  { height: 12px; background: var(--border); border-radius: 100px; overflow: hidden; }
     .bar-fill   {
       height: 100%; border-radius: 100px;
@@ -303,7 +303,7 @@
       font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 800;
       cursor: pointer; text-align: center; transition: background .2s; width: 100%;
     }
-    .btn-secondary:hover { background: #fff2ee; }
+    .btn-secondary:hover { background: #f0f8fc; }
     .btn-back {
       background: none; border: 2px solid var(--border); color: var(--soft);
       padding: 10px 16px; border-radius: var(--radius);
@@ -361,13 +361,13 @@
       color: var(--text); margin-bottom: 14px;
     }
     .prompt-instruction {
-      font-size: .8rem; font-weight: 600; color: #d94f3d;
+      font-size: .8rem; font-weight: 600; color: #1e9dc8;
       line-height: 1.6; margin-bottom: 12px; text-align: center;
     }
-    .prompt-instruction strong { color: #d94f3d; font-weight: 700; font-size: .8rem; }
+    .prompt-instruction strong { color: #1e9dc8; font-weight: 700; font-size: .8rem; }
     .prompt-slash-letter {
       font-family: 'Teachers', sans-serif;
-      font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 700; color: #d94f3d;
+      font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 700; color: #1e9dc8;
       display: block; line-height: 1.2; margin: 8px 0 16px;
     }
     .btn-confirm {
@@ -421,7 +421,7 @@
       text-transform: uppercase; color: #9a8880;
     }
     .goal-toggle {
-      display: flex; background: #2a2020; border-radius: 100px;
+      display: flex; background: #1a2028; border-radius: 100px;
       padding: 3px; gap: 2px;
     }
     .goal-btn {
@@ -429,11 +429,11 @@
       font-size: .78rem; font-weight: 700; font-family: 'Teachers', sans-serif;
       background: transparent; color: #c8a09a; transition: all .15s;
     }
-    .goal-btn.active { background: #fe6f5e; color: #fff; }
+    .goal-btn.active { background: #45b8e0; color: #fff; }
 
     /* ── FLUENCY CHART ── */
     .fluency-chart-section {
-      background: #1e1616; border-radius: 16px; border: 2px solid #6e3830;
+      background: #1e1616; border-radius: 16px; border: 2px solid #2a4a6a;
       padding: 14px 16px; margin-bottom: 20px;
     }
 
@@ -458,7 +458,7 @@
     }
     .streak-dot.practiced   { background: var(--accent); border-color: var(--accent2); color: #fff; }
     .streak-dot.today       { background: var(--green);  border-color: var(--green-dk);  color: #fff; transform: scale(1.12); }
-    .streak-dot.today-empty { border: 2px dashed var(--accent); color: var(--accent); background: #fff2ee; transform: scale(1.12); }
+    .streak-dot.today-empty { border: 2px dashed var(--accent); color: var(--accent); background: #f0f8fc; transform: scale(1.12); }
     .streak-message { font-size: .85rem; font-weight: 600; color: var(--soft); margin-top: 10px; text-align: center; }
     .streak-message strong { color: var(--text); }
 
@@ -477,7 +477,7 @@
     }
     .pts-earned-number {
       font-size: 8rem; font-weight: 900; line-height: 1;
-      background: linear-gradient(135deg, #ffb8a8, #22c55e);
+      background: linear-gradient(135deg, #a8dcf0, #22c55e);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       animation: popIn .55s cubic-bezier(.175,.885,.32,1.275) both;
       filter: drop-shadow(0 0 18px rgba(155,93,229,.5));
@@ -491,7 +491,7 @@
       50%      { filter: drop-shadow(0 0 36px rgba(155,93,229,.9)); }
     }
     .pts-earned-unit {
-      font-size: 1.2rem; font-weight: 800; color: #ffb8a8;
+      font-size: 1.2rem; font-weight: 800; color: #a8dcf0;
       margin-top: -6px;
     }
     .pts-total-row {
@@ -663,7 +663,7 @@
     }
     .res-pie-svg { width: 72px; height: 72px; transform: rotate(-90deg); flex-shrink: 0; }
     .res-pie-label { display: flex; flex-direction: column; gap: 2px; }
-    .res-pie-pct { font-size: 2rem; font-weight: 900; color: #ffb8a8; line-height: 1; }
+    .res-pie-pct { font-size: 2rem; font-weight: 900; color: #a8dcf0; line-height: 1; }
     .res-pie-sub { font-size: .75rem; font-weight: 700; color: var(--soft); text-transform: uppercase; letter-spacing: .06em; }
 
     .points-sub { font-size: .75rem; font-weight: 600; color: var(--soft); }
@@ -692,7 +692,7 @@
     /* ── Flashy goal display ── */
     .points-goal {
       font-size: 2.4rem; font-weight: 900; line-height: 1;
-      background: linear-gradient(135deg, #ffb8a8, #fbbf24);
+      background: linear-gradient(135deg, #a8dcf0, #fbbf24);
       -webkit-background-clip: text; -webkit-text-fill-color: transparent;
       background-clip: text;
       letter-spacing: -1px;
@@ -747,7 +747,7 @@
     .duration-btns { display: flex; gap: 8px; justify-content: center; margin-bottom: 18px; }
     .btn-duration {
       flex: 1; padding: 18px 8px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       border: none; border-radius: 16px;
       display: flex; flex-direction: column; align-items: center; gap: 2px;
       cursor: pointer; transition: opacity .2s, transform .1s;
@@ -848,7 +848,7 @@
     /* ── SETTINGS SCREEN ── */
     .settings-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -874,7 +874,7 @@
     .settings-letters { display: flex; flex-wrap: wrap; gap: 6px; }
     .drag-tile {
       width: 42px; height: 42px; border-radius: 10px;
-      background: linear-gradient(135deg, #d94f3d, #fe6f5e);
+      background: linear-gradient(135deg, #1e9dc8, #45b8e0);
       color: #fff; font-size: 1.2rem; font-weight: 900;
       display: flex; align-items: center; justify-content: center;
       cursor: grab; user-select: none;
@@ -884,7 +884,7 @@
     }
     .drag-tile:active { cursor: grabbing; transform: scale(1.08); box-shadow: 0 6px 18px rgba(124,58,237,.5); }
     .drag-tile.dragging { opacity: .45; transform: scale(0.95); }
-    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #ffb8a8; }
+    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #a8dcf0; }
 
     .settings-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
     .settings-note { font-size: .75rem; color: var(--soft); font-weight: 600; text-align: center; line-height: 1.5; }
@@ -907,7 +907,7 @@
     /* ── CUSTOMIZE SCREEN ── */
     .cust-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -1036,7 +1036,7 @@
     /* ── CLASS VIEW SCREEN ── */
     .class-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -1175,8 +1175,8 @@
         <svg class="pie-svg" viewBox="0 0 90 90">
           <defs>
             <linearGradient id="pieGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stop-color="#d94f3d"/>
-              <stop offset="100%" stop-color="#ffb8a8"/>
+              <stop offset="0%"   stop-color="#1e9dc8"/>
+              <stop offset="100%" stop-color="#a8dcf0"/>
             </linearGradient>
           </defs>
           <circle cx="45" cy="45" r="44" fill="#201818"/>
@@ -1395,7 +1395,7 @@
 
     <div class="cust-section-label">Pick a color</div>
     <div class="cust-colors">
-      <button class="cust-color-btn" id="color-purple" style="background:#fe6f5e" onclick="pickColor('#fe6f5e', 'purple')"></button>
+      <button class="cust-color-btn" id="color-purple" style="background:#45b8e0" onclick="pickColor('#45b8e0', 'purple')"></button>
       <button class="cust-color-btn" id="color-pink" style="background:#ec4899" onclick="pickColor('#ec4899', 'pink')"></button>
       <button class="cust-color-btn" id="color-blue" style="background:#3b82f6" onclick="pickColor('#3b82f6', 'blue')"></button>
       <button class="cust-color-btn" id="color-teal" style="background:#14b8a6" onclick="pickColor('#14b8a6', 'teal')"></button>
@@ -1452,8 +1452,8 @@
         <svg class="res-pie-svg" viewBox="0 0 90 90">
           <defs>
             <linearGradient id="resPieGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%"   stop-color="#d94f3d"/>
-              <stop offset="100%" stop-color="#ffb8a8"/>
+              <stop offset="0%"   stop-color="#1e9dc8"/>
+              <stop offset="100%" stop-color="#a8dcf0"/>
             </linearGradient>
           </defs>
           <circle cx="45" cy="45" r="44" fill="#201818"/>
@@ -1687,7 +1687,7 @@
       const name = inp.value.trim();
       if (!name) { inp.focus(); return; }
       const { scores, streak, history, responses } = freshScores();
-      state.students.push({ id:'stu_'+Date.now(), name, scores, streak, history, responses, practiceDays:[], notes:[], icon:'⭐', color:'#fe6f5e', level:1, goal:'accuracy', fluencyLog:[] });
+      state.students.push({ id:'stu_'+Date.now(), name, scores, streak, history, responses, practiceDays:[], notes:[], icon:'⭐', color:'#45b8e0', level:1, goal:'accuracy', fluencyLog:[] });
       saveState(); inp.value = ''; renderStudentList();
     }
 
@@ -1827,7 +1827,7 @@
     }
 
     function applyStudentTheme(student) {
-      const color = student.color || '#fe6f5e';
+      const color = student.color || '#45b8e0';
       const grad  = document.getElementById('pieGrad');
       if (grad) {
         grad.querySelector('stop:first-child').setAttribute('stop-color', color);
@@ -2116,12 +2116,12 @@
     // ========================================================
     // STUDENT CUSTOMIZATION
     // ========================================================
-    let _custIcon='⭐', _custColor='#fe6f5e';
+    let _custIcon='⭐', _custColor='#45b8e0';
 
     function showCustomize() {
       const student = currentStudent();
       if (!student) return;
-      _custIcon=student.icon||'⭐'; _custColor=student.color||'#fe6f5e';
+      _custIcon=student.icon||'⭐'; _custColor=student.color||'#45b8e0';
       document.getElementById('cust-student-name').textContent = student.name;
       updateCustPreview();
       document.querySelectorAll('.cust-icon-btn').forEach(b=>b.classList.toggle('selected',b.textContent===_custIcon));
@@ -2527,7 +2527,7 @@
         }).join('');
         histHtml += `<div style="margin-bottom:16px">
           <div style="font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;
-            color:#d94f3d;border-bottom:2px solid #ede9fe;padding-bottom:4px;margin-bottom:6px">Set ${setNum}</div>
+            color:#1e9dc8;border-bottom:2px solid #ede9fe;padding-bottom:4px;margin-bottom:6px">Set ${setNum}</div>
           <table style="width:100%;border-collapse:collapse">${rows}</table>
         </div>`;
       }
@@ -2543,7 +2543,7 @@
         <style>
           * { box-sizing:border-box; margin:0; padding:0; }
           #print-container { font-family: system-ui, sans-serif; color:#1a2340; padding:32px; max-width:800px; margin:0 auto; }
-          h1 { font-size:22px; font-weight:900; color:#d94f3d; }
+          h1 { font-size:22px; font-weight:900; color:#1e9dc8; }
           h2 { font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:.08em; color:#5a6484; margin:22px 0 8px; }
           .meta { font-size:12px; color:#94a3b8; margin-top:3px; }
           .summary { display:flex; gap:16px; margin-top:12px; margin-bottom:4px; }
@@ -2617,7 +2617,7 @@
     /* -- SETTINGS SCREEN -- */
     .settings-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -2643,7 +2643,7 @@
     .settings-letters { display: flex; flex-wrap: wrap; gap: 6px; }
     .drag-tile {
       width: 42px; height: 42px; border-radius: 10px;
-      background: linear-gradient(135deg, #d94f3d, #fe6f5e);
+      background: linear-gradient(135deg, #1e9dc8, #45b8e0);
       color: #fff; font-size: 1.2rem; font-weight: 900;
       display: flex; align-items: center; justify-content: center;
       cursor: grab; user-select: none;
@@ -2653,7 +2653,7 @@
     }
     .drag-tile:active { cursor: grabbing; transform: scale(1.08); box-shadow: 0 6px 18px rgba(124,58,237,.5); }
     .drag-tile.dragging { opacity: .45; transform: scale(0.95); }
-    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #ffb8a8; }
+    .drag-tile.drag-over { transform: scale(1.1); box-shadow: 0 0 0 3px #a8dcf0; }
 
     .settings-actions { display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px; }
     .settings-note { font-size: .75rem; color: var(--soft); font-weight: 600; text-align: center; line-height: 1.5; }
@@ -2676,7 +2676,7 @@
     /* -- CUSTOMIZE SCREEN -- */
     .cust-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -2805,7 +2805,7 @@
     /* -- CLASS VIEW SCREEN -- */
     .class-topbar {
       display: flex; align-items: center; gap: 12px;
-      background: linear-gradient(135deg, #d94f3d, #ffb8a8);
+      background: linear-gradient(135deg, #1e9dc8, #a8dcf0);
       margin: -24px -20px 22px; padding: 20px;
       border-radius: 0 0 24px 24px;
     }
@@ -2882,13 +2882,13 @@
 
   </style>
 
-        <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #d94f3d;padding-bottom:14px;margin-bottom:20px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;border-bottom:3px solid #1e9dc8;padding-bottom:14px;margin-bottom:20px">
           <div>
             <h1>Letter Sounds Report</h1>
             <div class="meta">${student.name} &nbsp;·&nbsp; ${today_str}</div>
           </div>
           <div style="text-align:right">
-            <div style="font-size:28px;font-weight:900;color:#d94f3d">${pts} pts</div>
+            <div style="font-size:28px;font-weight:900;color:#1e9dc8">${pts} pts</div>
             <div style="font-size:10px;color:#94a3b8;font-weight:700">of 520 &nbsp;·&nbsp; ${pct}% mastered</div>
           </div>
         </div>
@@ -2926,7 +2926,7 @@
         </div>
         ${setRowsHtml}
 
-        ${(student.notes && student.notes.length) ? '<h2 style="margin-top:28px">Teacher Notes</h2><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">' + student.notes.map(n => '<div style="padding:10px 12px;border-left:3px solid #d94f3d;background:#f5f3ff;border-radius:6px"><div style="font-size:12px;color:#1a2340">' + n.text + '</div><div style="font-size:10px;color:#94a3b8;margin-top:3px">' + n.date + '</div></div>').join('') + '</div>' : ''}
+        ${(student.notes && student.notes.length) ? '<h2 style="margin-top:28px">Teacher Notes</h2><div style="display:flex;flex-direction:column;gap:8px;margin-bottom:16px">' + student.notes.map(n => '<div style="padding:10px 12px;border-left:3px solid #1e9dc8;background:#f5f3ff;border-radius:6px"><div style="font-size:12px;color:#1a2340">' + n.text + '</div><div style="font-size:10px;color:#94a3b8;margin-top:3px">' + n.date + '</div></div>').join('') + '</div>' : ''}
 
         <h2 style="margin-top:28px">Response History</h2>
         <div style="font-size:10px;font-weight:700;color:#5a6484;display:flex;gap:12px;margin-bottom:10px">
@@ -3076,11 +3076,11 @@
       // Update teacher prompt based on phase
       const promptEl = document.getElementById('adult-prompt');
       if (phase === 1) {
-        promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#1e9dc8;">Expected: <em>${mnemonic}</em></span>`;
       } else if (phase === 2) {
-        promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#1e9dc8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       } else {
-        promptEl.innerHTML = `Ask: <strong>"Tell me the picture, tell me the sound."</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"Tell me the picture, tell me the sound."</strong><br><span style="font-size:.95rem;color:#1e9dc8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       }
 
       // Record when this card was shown (for sub-1-second detection)
@@ -3339,8 +3339,8 @@
         if (student) {
           const g = document.getElementById('resPieGrad');
           if (g) {
-            g.querySelector('stop:first-child').setAttribute('stop-color', student.color || '#d94f3d');
-            g.querySelector('stop:last-child').setAttribute('stop-color', shiftColor(student.color || '#d94f3d', 40));
+            g.querySelector('stop:first-child').setAttribute('stop-color', student.color || '#1e9dc8');
+            g.querySelector('stop:last-child').setAttribute('stop-color', shiftColor(student.color || '#1e9dc8', 40));
           }
         }
       })();
@@ -3361,7 +3361,7 @@
       // Confetti burst when points earned
       if (ptsEarned > 0) {
         const cel = document.querySelector('.points-celebration');
-        const colors = ['#fe6f5e','#ffb8a8','#22c55e','#fbbf24','#f472b6','#60a5fa'];
+        const colors = ['#45b8e0','#a8dcf0','#22c55e','#fbbf24','#f472b6','#60a5fa'];
         for (let i = 0; i < 28; i++) {
           const p = document.createElement('div');
           p.className = 'confetti-piece';
@@ -3508,7 +3508,7 @@
             if (!s.practiceDays) s.practiceDays = [];
             if (!s.notes)        s.notes = [];
             if (!s.icon)         s.icon  = '⭐';
-            if (!s.color)        s.color = '#fe6f5e';
+            if (!s.color)        s.color = '#45b8e0';
             if (!s.level)        s.level = 1;
             if (!s.goal)         s.goal  = 'accuracy';
             if (!s.fluencyLog)   s.fluencyLog = [];
@@ -3547,7 +3547,7 @@
 
   <!-- Info modal -->
   <div id="info-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-    <div style="background:#1e1515;border:2px solid #4a2e2e;border-radius:20px;max-width:480px;width:100%;padding:28px 24px;position:relative;max-height:90vh;overflow-y:auto;">
+    <div style="background:#141c24;border:2px solid #4a2e2e;border-radius:20px;max-width:480px;width:100%;padding:28px 24px;position:relative;max-height:90vh;overflow-y:auto;">
       <button onclick="hideInfo()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#9a8880;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
       <h2 style="font-family:'Teachers',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 16px;">How Letter Sounds Works</h2>
 
@@ -3586,9 +3586,9 @@
       </p>
 
       <p style="font-family:'Teachers',sans-serif;font-size:.85rem;color:#9a8880;line-height:1.6;margin:18px 0 0;text-align:center;">
-        Have feedback or suggestions? Email <a href="mailto:heathmck@gmail.com" style="color:#ffb8a8;">heathmck@gmail.com</a>
+        Have feedback or suggestions? Email <a href="mailto:heathmck@gmail.com" style="color:#a8dcf0;">heathmck@gmail.com</a>
       </p>
-      <button onclick="hideInfo()" style="margin-top:14px;width:100%;padding:12px;background:#d94f3d;border:none;border-radius:12px;color:#fff;font-family:'Teachers',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;">Got it</button>
+      <button onclick="hideInfo()" style="margin-top:14px;width:100%;padding:12px;background:#1e9dc8;border:none;border-radius:12px;color:#fff;font-family:'Teachers',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;">Got it</button>
     </div>
   </div>
 </body>
