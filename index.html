@@ -11,13 +11,13 @@
 
   <style>
     :root {
-      --bg:          #f0f4ff;
-      --bg:          #0f0f1a;
-      --surface:     #1a1a2e;
-      --surface2:    #232338;
-      --border:      #2e2e4a;
-      --text:        #f0f0ff;
-      --soft:        #9090b8;
+      --bg:          #fff5f2;
+      --bg:          #100c0c;
+      --surface:     #1a1313;
+      --surface2:    #201818;
+      --border:      #302020;
+      --text:        #f5efee;
+      --soft:        #9a8880;
       --accent:      #fe6f5e;
       --accent-dk:   #d94f3d;
       --accent2:     #ffb8a8;
@@ -30,8 +30,8 @@
       --amber:       #f59e0b;
       --amber-dk:    #d97706;
       --amber-bg:    #2a1f00;
-      --gray:        #6060a0;
-      --gray-bg:     #1a1a2e;
+      --gray:        #706060;
+      --gray-bg:     #1a1313;
       --radius:      16px;
       --shadow:      0 4px 24px rgba(155,93,229,.15);
       --shadow-card: 0 8px 32px rgba(0,0,0,.4);
@@ -42,7 +42,7 @@
     html, body {
       height: 100%;
       font-family: 'Teachers', sans-serif;
-      background: #0f0f1a;
+      background: #100c0c;
       color: var(--text);
       -webkit-font-smoothing: antialiased;
     }
@@ -90,31 +90,31 @@
     .student-list { list-style: none; display: flex; flex-direction: column; gap: 10px; }
     .student-item {
       display: flex; align-items: center; justify-content: space-between;
-      background: #e2d9f3; border: 2px solid #cfc4ec;
+      background: #f0e8e5; border: 2px solid #d4c0bc;
       border-radius: var(--radius); padding: 5px 16px;
       box-shadow: 0 2px 12px rgba(0,0,0,.15); transition: border-color .2s, box-shadow .2s; cursor: pointer;
     }
     .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(217,79,61,.2); }
     .student-left  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-    .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1a2e; }
+    .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1313; }
     .level-badge { font-size: .7rem; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: .05em; margin-top: 2px; display: inline-block; }
-    .level-badge-1 { background: #e0eaff; color: #3b5bdb; }
-    .level-badge-2 { background: #fce7ff; color: #9b2adb; }
+    .level-badge-1 { background: #ffeae6; color: #d94f3d; }
+    .level-badge-2 { background: #ffe5e0; color: #e05c3d; }
     .level-badge-3 { background: #dcfce7; color: #166534; }
     .mini-pills    { display: flex; gap: 8px; flex-wrap: wrap; }
     .pill { font-size: .75rem; font-weight: 800; padding: 3px 10px; border-radius: 100px; }
     .pill.known    { background: #dcfce7; color: #166534; }
     .pill.learning { background: #fef3c7; color: #92400e; }
-    .pill.unseen   { background: #f1f1f8;  color: #6060a0; }
+    .pill.unseen   { background: #f5efed;  color: #706060; }
     .student-arrow { font-size: 1.3rem; color: var(--accent); margin-left: 8px; }
     .btn-customize-inline {
-      background: none; border: none; color: #9090b8;
+      background: none; border: none; color: #9a8880;
       font-size: 1rem; cursor: pointer; padding: 4px 8px;
       border-radius: 8px; transition: color .2s, background .2s;
     }
     .btn-customize-inline:hover { color: var(--accent); background: #fff2ee; }
     .btn-delete {
-      background: none; border: none; color: #9090b8;
+      background: none; border: none; color: #9a8880;
       font-size: 1.1rem; cursor: pointer; padding: 4px 8px;
       border-radius: 8px; transition: color .2s, background .2s; margin-left: 4px;
     }
@@ -134,11 +134,11 @@
     .dash-topbar .btn-back { border-color: rgba(255,255,255,.3); color: #fff; }
     .dash-topbar .btn-back:hover { border-color: #fff; }
     .points-section {
-      background: #1a1a2e;
+      background: #1a1313;
       border-radius: 16px;
       padding: 14px 20px; margin-bottom: 22px;
       box-shadow: 0 4px 24px rgba(0,0,0,.4);
-      border: 2px solid #2e2e4e;
+      border: 2px solid #302020;
     }
     .points-body {
       display: flex; align-items: center; gap: 20px;
@@ -155,23 +155,23 @@
       transition: width .5s ease;
     }
     .letter-status-card {
-      background: #3d3d6b; border-radius: 16px;
+      background: #2e1e1e; border-radius: 16px;
       padding: 14px 16px; margin-bottom: 20px;
-      border: 2px solid #4e4e80;
+      border: 2px solid #4a2e2e;
     }
-    .grid-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8d8f0; margin-bottom: 10px; }
+    .grid-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8c8c5; margin-bottom: 10px; }
     .letter-grid { display: flex; justify-content: space-between; gap: 0; margin-bottom: 14px; }
     .grid-cell {
       display: flex; flex-direction: column; align-items: center; gap: 5px;
       cursor: default; padding: 2px 0;
     }
-    .grid-cell .ltr { font-size: .82rem; font-weight: 600; color: #c8c8e8; }
+    .grid-cell .ltr { font-size: .82rem; font-weight: 600; color: #c8b8b5; }
     .grid-cell .sdot {
       width: 8px; height: 8px; border-radius: 50%;
     }
     .grid-cell.known    .sdot { background: var(--green); }
     .grid-cell.learning .sdot { background: var(--amber); }
-    .grid-cell.unseen   .sdot { background: #4a4a80; }
+    .grid-cell.unseen   .sdot { background: #4a2e2e; }
     .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: .78rem; font-weight: 700; color: var(--soft); margin-bottom: 24px; }
     .ldot { width: 11px; height: 11px; border-radius: 4px; display: inline-block; margin-right: 4px; vertical-align: middle; }
     .ldot.known    { background: var(--green); }
@@ -234,7 +234,7 @@
     }
     .card-letter-text {
       font-size: clamp(5rem, 22vw, 9rem); font-family: 'Teachers', sans-serif;
-      font-weight: 700; color: #1a1a2e; user-select: none; line-height: 1;
+      font-weight: 700; color: #1a1313; user-select: none; line-height: 1;
     }
 
     /* Prompt */
@@ -273,7 +273,7 @@
       display: flex; flex-direction: column; align-items: center;
       padding-top: 28px; gap: 14px;
     }
-    #screen-results { background: #0f0f1a; }
+    #screen-results { background: #100c0c; }
     .res-emoji { font-size: 3.8rem; line-height: 1; }
     .res-title { font-size: 1.7rem; font-weight: 900; text-align: center; }
     .res-name  { font-size: 1rem; font-weight: 700; color: var(--soft); }
@@ -303,7 +303,7 @@
       font-size: 1rem; font-family: 'Teachers', sans-serif; font-weight: 800;
       cursor: pointer; text-align: center; transition: background .2s; width: 100%;
     }
-    .btn-secondary:hover { background: #eef2ff; }
+    .btn-secondary:hover { background: #fff2ee; }
     .btn-back {
       background: none; border: 2px solid var(--border); color: var(--soft);
       padding: 10px 16px; border-radius: var(--radius);
@@ -361,10 +361,10 @@
       color: var(--text); margin-bottom: 14px;
     }
     .prompt-instruction {
-      font-size: .8rem; font-weight: 600; color: #6b21a8;
+      font-size: .8rem; font-weight: 600; color: #d94f3d;
       line-height: 1.6; margin-bottom: 12px; text-align: center;
     }
-    .prompt-instruction strong { color: #6b21a8; font-weight: 700; font-size: .8rem; }
+    .prompt-instruction strong { color: #d94f3d; font-weight: 700; font-size: .8rem; }
     .prompt-slash-letter {
       font-family: 'Teachers', sans-serif;
       font-size: clamp(1.4rem, 5vw, 2rem); font-weight: 700; color: #d94f3d;
@@ -418,7 +418,7 @@
     }
     .goal-label {
       font-size: .72rem; font-weight: 700; letter-spacing: .08em;
-      text-transform: uppercase; color: #9090b8;
+      text-transform: uppercase; color: #9a8880;
     }
     .goal-toggle {
       display: flex; background: #2a2020; border-radius: 100px;
@@ -438,27 +438,27 @@
     }
 
     .streak-section {
-      background: #3d3d6b; border-radius: 16px;
+      background: #2e1e1e; border-radius: 16px;
       padding: 14px 16px; margin-bottom: 20px;
-      border: 2px solid #4e4e80;
+      border: 2px solid #4a2e2e;
     }
     .streak-header {
       display: flex; align-items: baseline; justify-content: space-between;
       margin-bottom: 10px;
     }
-    .streak-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8d8f0; }
+    .streak-label { font-size: .8rem; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; color: #d8c8c5; }
     .streak-count { font-size: 1.1rem; font-weight: 900; color: var(--accent); }
     .streak-dots  { display: flex; gap: 6px; flex-wrap: wrap; }
     .streak-dot {
       width: 34px; height: 34px; border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: .7rem; font-weight: 800; letter-spacing: 0;
-      border: 2px solid var(--border); background: #12122a; color: var(--gray);
+      border: 2px solid var(--border); background: #181212; color: var(--gray);
       transition: transform .15s;
     }
     .streak-dot.practiced   { background: var(--accent); border-color: var(--accent2); color: #fff; }
     .streak-dot.today       { background: var(--green);  border-color: var(--green-dk);  color: #fff; transform: scale(1.12); }
-    .streak-dot.today-empty { border: 2px dashed var(--accent); color: var(--accent); background: #eef2ff; transform: scale(1.12); }
+    .streak-dot.today-empty { border: 2px dashed var(--accent); color: var(--accent); background: #fff2ee; transform: scale(1.12); }
     .streak-message { font-size: .85rem; font-weight: 600; color: var(--soft); margin-top: 10px; text-align: center; }
     .streak-message strong { color: var(--text); }
 
@@ -707,7 +707,7 @@
 
 
     .pie-pts-big {
-      font-size: 2.8rem; font-weight: 700; color: #9090b8;
+      font-size: 2.8rem; font-weight: 700; color: #9a8880;
       line-height: 1; letter-spacing: -1px;
     }
 
@@ -735,13 +735,13 @@
     }
     .duration-overlay.visible { display: flex; }
     .duration-box {
-      background: #1a1a2e; border-radius: 24px;
+      background: #1a1313; border-radius: 24px;
       padding: 32px 28px; max-width: 300px; width: 90%;
       text-align: center; box-shadow: 0 12px 48px rgba(0,0,0,.5);
-      border: 2px solid #2e2e4a;
+      border: 2px solid #302020;
     }
     .duration-title {
-      font-size: 1.2rem; font-weight: 900; color: #f0f0ff;
+      font-size: 1.2rem; font-weight: 900; color: #f5efee;
       margin-bottom: 22px; text-transform: uppercase; letter-spacing: .08em;
     }
     .duration-btns { display: flex; gap: 8px; justify-content: center; margin-bottom: 18px; }
@@ -763,7 +763,7 @@
       font-weight: 700; cursor: pointer; padding: 6px 12px;
       transition: color .2s;
     }
-    .btn-dur-cancel:hover { color: #f0f0ff; }
+    .btn-dur-cancel:hover { color: #f5efee; }
 
 
     .btn-print {
@@ -796,7 +796,7 @@
     }
     .notes-label {
       font-size: .8rem; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .08em; color: #d8d8f0;
+      letter-spacing: .08em; color: #d8c8c5;
     }
     .btn-notes-save {
       padding: 6px 14px; background: var(--accent);
@@ -806,7 +806,7 @@
     }
     .btn-notes-save:hover { opacity: .85; }
     .notes-input {
-      width: 100%; background: #12122a; border: 1.5px solid var(--border);
+      width: 100%; background: #181212; border: 1.5px solid var(--border);
       border-radius: 10px; padding: 10px 12px;
       font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 500;
       color: var(--text); resize: none; outline: none;
@@ -818,7 +818,7 @@
     /* Log of saved notes */
     .notes-log { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
     .note-entry {
-      background: #12122a; border-radius: 10px;
+      background: #181212; border-radius: 10px;
       padding: 10px 12px; border-left: 3px solid var(--accent);
       position: relative;
     }
@@ -990,7 +990,7 @@
     }
     .qr-url-input {
       flex: 1; padding: 8px 12px;
-      background: #12122a; border: 1.5px solid var(--border);
+      background: #181212; border: 1.5px solid var(--border);
       border-radius: 8px; font-family: 'Teachers', sans-serif;
       font-size: .8rem; font-weight: 500; color: var(--text); outline: none;
       transition: border-color .2s;
@@ -1070,7 +1070,7 @@
     }
     .class-bar-known    { background: #166534; height: 100%; transition: width .4s; }
     .class-bar-learning { background: #92400e; height: 100%; transition: width .4s; }
-    .class-bar-unseen   { background: #2e2e4a; height: 100%; }
+    .class-bar-unseen   { background: #302020; height: 100%; }
     .class-bar-stat {
       font-size: .68rem; font-weight: 700; color: var(--soft);
       white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right;
@@ -1179,7 +1179,7 @@
               <stop offset="100%" stop-color="#ffb8a8"/>
             </linearGradient>
           </defs>
-          <circle cx="45" cy="45" r="44" fill="#2a2a3e"/>
+          <circle cx="45" cy="45" r="44" fill="#201818"/>
           <path id="dash-pie" fill="url(#pieGrad)" d="M45,45 L45,1"/>
         </svg>
         <span id="dash-pct" class="pie-pts-big">0 points</span>
@@ -1456,7 +1456,7 @@
               <stop offset="100%" stop-color="#ffb8a8"/>
             </linearGradient>
           </defs>
-          <circle cx="45" cy="45" r="44" fill="#2a2a3e"/>
+          <circle cx="45" cy="45" r="44" fill="#201818"/>
           <path id="res-pie" fill="url(#resPieGrad)" d="M45,45 L45,1"/>
         </svg>
         <div class="res-pie-label">
@@ -1772,7 +1772,7 @@
 
       // Grid lines + labels
       ctx.font = '10px system-ui';
-      ctx.fillStyle = '#9090b8';
+      ctx.fillStyle = '#9a8880';
       ctx.textAlign = 'right';
       logLines.forEach(v => {
         const y = yPos(v);
@@ -1783,7 +1783,7 @@
       });
 
       if (!log.length) {
-        ctx.fillStyle = '#6060a0';
+        ctx.fillStyle = '#706060';
         ctx.textAlign = 'center';
         ctx.font = '11px system-ui';
         ctx.fillText('No fluency data yet', W / 2, H / 2);
@@ -1793,7 +1793,7 @@
       const xPos = i => PAD.left + (log.length === 1 ? cw / 2 : i / (log.length - 1) * cw);
 
       // Draw x-axis date labels (first and last)
-      ctx.fillStyle = '#9090b8';
+      ctx.fillStyle = '#9a8880';
       ctx.font = '9px system-ui';
       ctx.textAlign = 'left';
       ctx.fillText(log[0].date.slice(5), PAD.left, H - 6);
@@ -2195,7 +2195,7 @@
           const learningPct = Math.round(learning/total*100);
           const unseenPct   = 100 - knownPct - learningPct;
           // Color the badge by average status
-          const bg = known===total ? '#166534' : known>0||learning>0 ? '#92400e' : '#2e2e4a';
+          const bg = known===total ? '#166534' : known>0||learning>0 ? '#92400e' : '#302020';
           const urbanist = ['k'].includes(l);
           rows += `<div class="class-letter-row">
             <div class="class-letter-badge" style="background:${bg};font-family:${urbanist?"'Teachers'":"'Teachers'"}, sans-serif">${l}</div>
@@ -2566,7 +2566,7 @@
     }
     .notes-label {
       font-size: .8rem; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .08em; color: #d8d8f0;
+      letter-spacing: .08em; color: #d8c8c5;
     }
     .btn-notes-save {
       padding: 6px 14px; background: var(--accent);
@@ -2576,7 +2576,7 @@
     }
     .btn-notes-save:hover { opacity: .85; }
     .notes-input {
-      width: 100%; background: #12122a; border: 1.5px solid var(--border);
+      width: 100%; background: #181212; border: 1.5px solid var(--border);
       border-radius: 10px; padding: 10px 12px;
       font-family: 'Teachers', sans-serif; font-size: .9rem; font-weight: 500;
       color: var(--text); resize: none; outline: none;
@@ -2588,7 +2588,7 @@
     /* Log of saved notes */
     .notes-log { margin-top: 10px; display: flex; flex-direction: column; gap: 8px; }
     .note-entry {
-      background: #12122a; border-radius: 10px;
+      background: #181212; border-radius: 10px;
       padding: 10px 12px; border-left: 3px solid var(--accent);
       position: relative;
     }
@@ -2759,7 +2759,7 @@
     }
     .qr-url-input {
       flex: 1; padding: 8px 12px;
-      background: #12122a; border: 1.5px solid var(--border);
+      background: #181212; border: 1.5px solid var(--border);
       border-radius: 8px; font-family: 'Teachers', sans-serif;
       font-size: .8rem; font-weight: 500; color: var(--text); outline: none;
       transition: border-color .2s;
@@ -2839,7 +2839,7 @@
     }
     .class-bar-known    { background: #166534; height: 100%; transition: width .4s; }
     .class-bar-learning { background: #92400e; height: 100%; transition: width .4s; }
-    .class-bar-unseen   { background: #2e2e4a; height: 100%; }
+    .class-bar-unseen   { background: #302020; height: 100%; }
     .class-bar-stat {
       font-size: .68rem; font-weight: 700; color: var(--soft);
       white-space: nowrap; flex-shrink: 0; min-width: 48px; text-align: right;
@@ -3076,11 +3076,11 @@
       // Update teacher prompt based on phase
       const promptEl = document.getElementById('adult-prompt');
       if (phase === 1) {
-        promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"What picture?"</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}</em></span>`;
       } else if (phase === 2) {
-        promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"Say the picture and the beginning sound."</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       } else {
-        promptEl.innerHTML = `Ask: <strong>"Tell me the picture, tell me the sound."</strong><br><span style="font-size:.95rem;color:#6b21a8;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
+        promptEl.innerHTML = `Ask: <strong>"Tell me the picture, tell me the sound."</strong><br><span style="font-size:.95rem;color:#d94f3d;">Expected: <em>${mnemonic}, /${letter}/</em></span>`;
       }
 
       // Record when this card was shown (for sub-1-second detection)
@@ -3468,7 +3468,7 @@
           text:   url,
           width:  120,
           height: 120,
-          colorDark:  '#1a1a2e',
+          colorDark:  '#1a1313',
           colorLight: '#ffffff',
           correctLevel: QRCode.CorrectLevel.M
         });
@@ -3547,45 +3547,45 @@
 
   <!-- Info modal -->
   <div id="info-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9999;align-items:center;justify-content:center;padding:20px;">
-    <div style="background:#1e1e3a;border:2px solid #4e4e80;border-radius:20px;max-width:480px;width:100%;padding:28px 24px;position:relative;max-height:90vh;overflow-y:auto;">
-      <button onclick="hideInfo()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#9090b8;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
+    <div style="background:#1e1515;border:2px solid #4a2e2e;border-radius:20px;max-width:480px;width:100%;padding:28px 24px;position:relative;max-height:90vh;overflow-y:auto;">
+      <button onclick="hideInfo()" style="position:absolute;top:14px;right:16px;background:none;border:none;color:#9a8880;font-size:1.4rem;cursor:pointer;line-height:1;">✕</button>
       <h2 style="font-family:'Teachers',sans-serif;font-size:1.3rem;font-weight:800;color:#fff;margin:0 0 16px;">How Letter Sounds Works</h2>
 
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         <strong style="color:#fff;">Soundfluency Mnemonics</strong> is a practice tool for K–2 students learning letter-sound correspondences through alphabet picture mnemonics. It builds accurate, automatic recall across three phases and tracks mastery using research-based principles.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Three phases</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         Students progress through <strong style="color:#fff;">Phase I: Imagery</strong> (name the picture), <strong style="color:#fff;">Phase II: Auditory</strong> (say the picture and its beginning sound), and <strong style="color:#fff;">Phase III: Integration</strong> (letter only — say the picture and the sound from memory). Each phase builds on the last.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">How a session works</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         Each session works through a set of 5 letters in shuffled order. Tap <strong style="color:#fff;">correct</strong> if the student responds correctly on the first try, <strong style="color:#fff;">incorrect</strong> if they miss it, or <strong style="color:#fff;">answer provided</strong> if you had to model it. A missed letter re-queues a few cards later so the student retrieves it again before the session ends.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Interleaving</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         Letters are mixed together in a shuffled order rather than drilled one at a time. This is called <strong style="color:#fff;">interleaving</strong> — it feels harder in the moment, but it produces stronger, more flexible memory than blocked practice. Two already-mastered letters are also included in every set so retention doesn't fade.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Mastery rule</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         A letter is marked <em>Known</em> only after the student answers it correctly on the <strong style="color:#fff;">first try</strong> on <strong style="color:#fff;">3 consecutive practice days</strong>. Same-day repetition doesn't count — only the first response of each day matters. A gap day resets the consecutive count, so the student must demonstrate retention across real time.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Accuracy vs. Fluency goal</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 14px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
         Each student has a <strong style="color:#fff;">Practice Goal</strong> toggle on their dashboard. <strong style="color:#fff;">Accuracy</strong> mode uses a teacher-chosen session length and tracks correct/incorrect. <strong style="color:#fff;">Fluency</strong> mode locks each session to 1 minute and records <strong style="color:#fff;">correct per minute</strong> and <strong style="color:#fff;">errors per minute</strong> after every session, displayed on a semi-log chart (Precision Teaching style) so you can see both speed and accuracy trends over time.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Letter sets &amp; points</h3>
-      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8c8e8;line-height:1.6;margin:0 0 4px;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 4px;">
         Students earn points each day they pass a letter. The goal of <strong style="color:#fff;">520 points</strong> represents all 26 letters mastered across 3 days each. You can reorder letters to match your program's scope &amp; sequence using the <strong style="color:#fff;">⚙ Letter Sets</strong> button.
       </p>
 
-      <p style="font-family:'Teachers',sans-serif;font-size:.85rem;color:#9090b8;line-height:1.6;margin:18px 0 0;text-align:center;">
+      <p style="font-family:'Teachers',sans-serif;font-size:.85rem;color:#9a8880;line-height:1.6;margin:18px 0 0;text-align:center;">
         Have feedback or suggestions? Email <a href="mailto:heathmck@gmail.com" style="color:#ffb8a8;">heathmck@gmail.com</a>
       </p>
       <button onclick="hideInfo()" style="margin-top:14px;width:100%;padding:12px;background:#d94f3d;border:none;border-radius:12px;color:#fff;font-family:'Teachers',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;">Got it</button>
