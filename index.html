@@ -411,6 +411,32 @@
 
 
     /* ── DAILY STREAK ── */
+    /* ── GOAL TOGGLE ── */
+    .goal-toggle-row {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .goal-label {
+      font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+      text-transform: uppercase; color: #9090b8;
+    }
+    .goal-toggle {
+      display: flex; background: #2a2a4a; border-radius: 100px;
+      padding: 3px; gap: 2px;
+    }
+    .goal-btn {
+      padding: 5px 16px; border-radius: 100px; border: none; cursor: pointer;
+      font-size: .78rem; font-weight: 700; font-family: 'Teachers', sans-serif;
+      background: transparent; color: #9090b8; transition: all .15s;
+    }
+    .goal-btn.active { background: #7048b5; color: #fff; }
+
+    /* ── FLUENCY CHART ── */
+    .fluency-chart-section {
+      background: #1e1e3a; border-radius: 16px; border: 2px solid #4e4e80;
+      padding: 14px 16px; margin-bottom: 20px;
+    }
+
     .streak-section {
       background: #3d3d6b; border-radius: 16px;
       padding: 14px 16px; margin-bottom: 20px;
@@ -1240,11 +1266,30 @@
     </div>
 
 
+    <!-- Goal toggle -->
+    <div class="goal-toggle-row">
+      <span class="goal-label">Practice Goal</span>
+      <div class="goal-toggle">
+        <button id="btn-goal-accuracy" class="goal-btn active" onclick="setStudentGoal('accuracy')">Accuracy</button>
+        <button id="btn-goal-fluency"  class="goal-btn"        onclick="setStudentGoal('fluency')">Fluency</button>
+      </div>
+    </div>
+
+    <!-- Fluency chart (shown in fluency mode only) -->
+    <div id="fluency-chart-section" class="fluency-chart-section" hidden>
+      <div class="grid-label">Fluency Progress</div>
+      <canvas id="fluency-canvas" width="320" height="180" style="width:100%;max-width:320px;display:block;margin:0 auto;"></canvas>
+      <div style="display:flex;gap:16px;justify-content:center;margin-top:8px;font-size:.72rem;font-weight:700;letter-spacing:.04em;">
+        <span style="color:#22c55e;">● Correct / min</span>
+        <span style="color:#f87171;">● Errors / min</span>
+      </div>
+    </div>
+
     <div class="letter-status-card">
       <div class="grid-label">Letter Status</div>
       <div id="letter-grid" class="letter-grid"></div>
       <div class="legend">
-        <span><span class="ldot known"></span>Known (3-in-a-row, 3 days)</span>
+        <span><span class="ldot known"></span>Known (first try correct, 3 days in a row)</span>
         <span><span class="ldot learning"></span>Practicing</span>
         <span><span class="ldot unseen"></span>Not yet seen</span>
       </div>
@@ -1588,9 +1633,10 @@
     };
 
     const SESSION_SECS    = 2 * 60;  // default session length (overridden by duration picker)
-    const SET_SIZE        = 6;       // letters per set
-    const DAY_STREAK_NEEDED = 2;     // correct-in-a-row to pass a day
-    const DAYS_NEEDED     = 3;       // days needed for mastery
+    const FLUENCY_SECS    = 60;      // fluency mode is always 1 minute
+    const SET_SIZE        = 5;       // unknown letters per set
+    const DAY_STREAK_NEEDED = 2;     // kept for mid-session instant-mastery; NOT used for daily pass
+    const DAYS_NEEDED     = 3;       // consecutive days needed for mastery
     const KNOWN_STREAK    = 3;       // in-session streak for mid-session promotion
     const KNOWN_REVIEW_COUNT = 2;    // known letters sprinkled per set for retention
     const PTS_PER_PASS    = 5;       // points for passing on days 1-2
@@ -1663,7 +1709,20 @@
     }
 
     function passedDays(student, letter) {
-      return ((student.history||{})[letter]||[]).filter(e=>e.passed).length;
+      // Count consecutive calendar days (ending at most recent) where first-try was correct
+      const passed = ((student.history||{})[letter]||[])
+        .filter(e => e.passed)
+        .map(e => e.date)
+        .sort();
+      if (!passed.length) return 0;
+      // Walk backward from the last passed date, count consecutive days
+      let count = 1;
+      for (let i = passed.length - 1; i > 0; i--) {
+        const gap = (new Date(passed[i]) - new Date(passed[i-1])) / 86400000;
+        if (Math.round(gap) === 1) count++;
+        else break;
+      }
+      return count;
     }
 
     function calcPoints(student) {
@@ -1709,7 +1768,7 @@
       const name = inp.value.trim();
       if (!name) { inp.focus(); return; }
       const { scores, streak, history, responses } = freshScores();
-      state.students.push({ id:'stu_'+Date.now(), name, scores, streak, history, responses, practiceDays:[], notes:[], icon:'⭐', color:'#9b5de5', level:1 });
+      state.students.push({ id:'stu_'+Date.now(), name, scores, streak, history, responses, practiceDays:[], notes:[], icon:'⭐', color:'#9b5de5', level:1, goal:'accuracy', fluencyLog:[] });
       saveState(); inp.value = ''; renderStudentList();
     }
 
@@ -1759,6 +1818,94 @@
         cell.title = status==='known' ? `${l}: mastered!` : status==='learning' ? `${l}: ${days}/3 days` : `${l}: not yet seen`;
         grid.appendChild(cell);
       });
+
+      // Goal toggle + chart
+      const goal = student.goal || 'accuracy';
+      document.getElementById('btn-goal-accuracy').classList.toggle('active', goal === 'accuracy');
+      document.getElementById('btn-goal-fluency').classList.toggle('active', goal === 'fluency');
+      const chartSection = document.getElementById('fluency-chart-section');
+      chartSection.hidden = goal !== 'fluency';
+      if (goal === 'fluency') renderFluencyChart(student);
+    }
+
+    function setStudentGoal(goal) {
+      const student = currentStudent();
+      if (!student) return;
+      student.goal = goal;
+      saveState();
+      renderDashboard(student);
+    }
+
+    function renderFluencyChart(student) {
+      const log = (student.fluencyLog || []).slice(-20); // last 20 sessions
+      const canvas = document.getElementById('fluency-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      const W = canvas.width, H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+
+      // Semi-log y scale: 1, 2, 5, 10, 20, 50, 100, 200
+      const logLines = [1, 2, 5, 10, 20, 50, 100, 200];
+      const PAD = { top: 12, right: 12, bottom: 28, left: 36 };
+      const cw = W - PAD.left - PAD.right;
+      const ch = H - PAD.top - PAD.bottom;
+      const logMin = Math.log10(1), logMax = Math.log10(200);
+      const yPos = v => PAD.top + ch - (Math.log10(Math.max(1, v)) - logMin) / (logMax - logMin) * ch;
+
+      // Grid lines + labels
+      ctx.font = '10px system-ui';
+      ctx.fillStyle = '#9090b8';
+      ctx.textAlign = 'right';
+      logLines.forEach(v => {
+        const y = yPos(v);
+        ctx.strokeStyle = '#2e2e52';
+        ctx.lineWidth = 1;
+        ctx.beginPath(); ctx.moveTo(PAD.left, y); ctx.lineTo(PAD.left + cw, y); ctx.stroke();
+        ctx.fillText(v, PAD.left - 4, y + 3);
+      });
+
+      if (!log.length) {
+        ctx.fillStyle = '#6060a0';
+        ctx.textAlign = 'center';
+        ctx.font = '11px system-ui';
+        ctx.fillText('No fluency data yet', W / 2, H / 2);
+        return;
+      }
+
+      const xPos = i => PAD.left + (log.length === 1 ? cw / 2 : i / (log.length - 1) * cw);
+
+      // Draw x-axis date labels (first and last)
+      ctx.fillStyle = '#9090b8';
+      ctx.font = '9px system-ui';
+      ctx.textAlign = 'left';
+      ctx.fillText(log[0].date.slice(5), PAD.left, H - 6);
+      if (log.length > 1) {
+        ctx.textAlign = 'right';
+        ctx.fillText(log[log.length-1].date.slice(5), PAD.left + cw, H - 6);
+      }
+
+      // Draw correct/min line (green)
+      const drawLine = (key, color) => {
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        log.forEach((pt, i) => {
+          const x = xPos(i), y = yPos(pt[key] || 0.5);
+          i === 0 ? ctx.moveTo(x, y) : ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        // Dots
+        log.forEach((pt, i) => {
+          ctx.fillStyle = color;
+          ctx.beginPath();
+          ctx.arc(xPos(i), yPos(pt[key] || 0.5), 3, 0, 2 * Math.PI);
+          ctx.fill();
+        });
+      };
+
+      drawLine('cpm', '#22c55e');
+      drawLine('epm', '#f87171');
     }
 
     function applyStudentTheme(student) {
@@ -1849,7 +1996,9 @@
       LETTERS_ALPHA.forEach(l => {
         if (!sess.practicedLetters.has(l)) return;
         if (!student.history[l]) student.history[l] = [];
-        const passed = (student.streak[l]||0) >= DAY_STREAK_NEEDED;
+        // First-try mastery: only the first response to this letter today counts
+        const todayRsp = (student.responses[l]||[]).filter(r => r.date===t);
+        const passed = todayRsp.length > 0 && todayRsp[0].outcome === 'correct';
         const existing = student.history[l].find(e => e.date===t);
         const wasAlreadyPassed = existing && existing.passed;
         if (existing) { if (passed) existing.passed = true; }
@@ -1913,7 +2062,7 @@
         correctLetters:  new Set(), wrongLetters: new Set(), providedLetters: new Set(),
         practicedLetters: new Set(),
         instantStreak:   {},
-        secsLeft:        state.chosenDuration || SESSION_SECS,
+        secsLeft:        (student.goal==='fluency') ? FLUENCY_SECS : (state.chosenDuration || SESSION_SECS),
         timerInterval:   null,
         cardTimer:       null,
         paused:          false,
@@ -2882,6 +3031,13 @@
     // DURATION PICKER
     // ========================================================
     function showDurationPicker() {
+      // Fluency mode always uses 1 minute — skip the picker
+      const student = currentStudent();
+      if (student && student.goal === 'fluency') {
+        state.chosenDuration = FLUENCY_SECS;
+        startSession();
+        return;
+      }
       document.getElementById('duration-overlay').classList.add('visible');
     }
 
@@ -3221,8 +3377,21 @@
       // Snapshot points before recording so we can show the delta
       const ptsEarned = recordDailyResults(); // lock in results, returns session points
       recordPracticeDay();  // mark today as a practiced day for the streak
-      saveState();
+
+      // Fluency logging: compute c/min and e/min from the 60-second session
       const sess = state.session;
+      if (sess && student && student.goal === 'fluency') {
+        const secsUsed = FLUENCY_SECS - Math.max(0, sess.secsLeft);
+        const mins = secsUsed > 0 ? secsUsed / 60 : 1;
+        if (!student.fluencyLog) student.fluencyLog = [];
+        student.fluencyLog.push({
+          date: today(),
+          cpm:  Math.round(sess.totalCorrect / mins),
+          epm:  Math.round(sess.totalWrong   / mins),
+        });
+      }
+
+      saveState();
       if (!sess) { showDashboard(); return; }
 
       const total = sess.totalCorrect + sess.totalWrong + sess.totalProvided;
@@ -3292,7 +3461,24 @@
         }
       }
 
-      document.getElementById('breakdown').innerHTML = '';
+      // Show c/min + e/min for fluency sessions
+      const breakdownEl = document.getElementById('breakdown');
+      if (student && student.goal === 'fluency' && student.fluencyLog && student.fluencyLog.length) {
+        const last = student.fluencyLog[student.fluencyLog.length - 1];
+        breakdownEl.innerHTML = `
+          <div style="display:flex;gap:24px;justify-content:center;margin-top:4px;">
+            <div style="text-align:center;">
+              <div style="font-size:2rem;font-weight:800;color:#22c55e;font-variant-numeric:tabular-nums;">${last.cpm}</div>
+              <div style="font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;">correct / min</div>
+            </div>
+            <div style="text-align:center;">
+              <div style="font-size:2rem;font-weight:800;color:#f87171;font-variant-numeric:tabular-nums;">${last.epm}</div>
+              <div style="font-size:.75rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#6b7280;">errors / min</div>
+            </div>
+          </div>`;
+      } else {
+        breakdownEl.innerHTML = '';
+      }
 
       showScreen('screen-results');
     }
@@ -3406,6 +3592,8 @@
             if (!s.icon)         s.icon  = '⭐';
             if (!s.color)        s.color = '#9b5de5';
             if (!s.level)        s.level = 1;
+            if (!s.goal)         s.goal  = 'accuracy';
+            if (!s.fluencyLog)   s.fluencyLog = [];
             LETTERS_ALPHA.forEach(l => {
               if (!s.history[l])   s.history[l]   = [];
               if (!s.responses[l]) s.responses[l] = [];
