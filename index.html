@@ -3456,7 +3456,7 @@
 
     function getQrUrl() {
       return localStorage.getItem(QR_STORE) ||
-             'https://heathmck-a11y.github.io/soundfluency/';
+             'https://heathmck-a11y.github.io/soundfluency-mnemonics/';
     }
 
     function renderQrCode() {
@@ -3466,8 +3466,8 @@
       if (typeof QRCode !== 'undefined') {
         new QRCode(container, {
           text:   url,
-          width:  64,
-          height: 64,
+          width:  120,
+          height: 120,
           colorDark:  '#1a1a2e',
           colorLight: '#ffffff',
           correctLevel: QRCode.CorrectLevel.M
