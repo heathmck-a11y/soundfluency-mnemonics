@@ -412,6 +412,7 @@
 
     /* ── DAILY STREAK ── */
     /* ── GOAL TOGGLE ── */
+    .goal-toggle-row[hidden] { display: none; }
     .goal-toggle-row {
       display: flex; align-items: center; justify-content: space-between;
       margin-bottom: 16px;
@@ -1186,7 +1187,7 @@
       </div>
     </div>
     <!-- Goal toggle -->
-    <div class="goal-toggle-row">
+    <div class="goal-toggle-row" id="goal-toggle-row">
       <span class="goal-label">Practice Goal</span>
       <div class="goal-toggle">
         <button id="btn-goal-accuracy" class="goal-btn active" onclick="setStudentGoal('accuracy')">Accuracy</button>
@@ -1738,12 +1739,20 @@
       });
 
       // Goal toggle + chart
-      const goal = student.goal || 'accuracy';
+      const goal = goalOf(student);
+      document.getElementById('goal-toggle-row').hidden = (student.level || 1) === 1;
       document.getElementById('btn-goal-accuracy').classList.toggle('active', goal === 'accuracy');
       document.getElementById('btn-goal-fluency').classList.toggle('active', goal === 'fluency');
       const chartSection = document.getElementById('fluency-chart-section');
       chartSection.hidden = goal !== 'fluency';
       if (goal === 'fluency') renderFluencyChart(student);
+    }
+
+    // Phase I (Imagery) always runs in accuracy mode; the stored goal is kept for later phases
+    function goalOf(student) {
+      if (!student) return 'accuracy';
+      if ((student.level || 1) === 1) return 'accuracy';
+      return student.goal || 'accuracy';
     }
 
     function setStudentGoal(goal) {
@@ -1980,7 +1989,7 @@
         correctLetters:  new Set(), wrongLetters: new Set(), providedLetters: new Set(),
         practicedLetters: new Set(),
         instantStreak:   {},
-        secsLeft:        (student.goal==='fluency') ? FLUENCY_SECS : (state.chosenDuration || SESSION_SECS),
+        secsLeft:        (goalOf(student)==='fluency') ? FLUENCY_SECS : (state.chosenDuration || SESSION_SECS),
         timerInterval:   null,
         cardTimer:       null,
         paused:          false,
@@ -2951,7 +2960,7 @@
     function showDurationPicker() {
       // Fluency mode always uses 1 minute — skip the picker
       const student = currentStudent();
-      if (student && student.goal === 'fluency') {
+      if (student && goalOf(student) === 'fluency') {
         state.chosenDuration = FLUENCY_SECS;
         startSession();
         return;
@@ -3301,7 +3310,7 @@
 
       // Fluency logging: compute c/min and e/min from the 60-second session
       const sess = state.session;
-      if (sess && student && student.goal === 'fluency') {
+      if (sess && student && goalOf(student) === 'fluency') {
         const secsUsed = FLUENCY_SECS - Math.max(0, sess.secsLeft);
         const mins = secsUsed > 0 ? secsUsed / 60 : 1;
         if (!student.fluencyLog) student.fluencyLog = [];
@@ -3384,7 +3393,7 @@
 
       // Show c/min + e/min for fluency sessions
       const breakdownEl = document.getElementById('breakdown');
-      if (student && student.goal === 'fluency' && student.fluencyLog && student.fluencyLog.length) {
+      if (student && goalOf(student) === 'fluency' && student.fluencyLog && student.fluencyLog.length) {
         const last = student.fluencyLog[student.fluencyLog.length - 1];
         breakdownEl.innerHTML = `
           <div style="display:flex;gap:24px;justify-content:center;margin-top:4px;">
@@ -3580,7 +3589,7 @@
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Accuracy vs. Fluency goal</h3>
       <p style="font-family:'Teachers',sans-serif;font-size:.9rem;color:#c8b8b5;line-height:1.6;margin:0 0 14px;">
-        Each student has a <strong style="color:#fff;">Practice Goal</strong> toggle on their dashboard. <strong style="color:#fff;">Accuracy</strong> mode uses a teacher-chosen session length and tracks correct/incorrect. <strong style="color:#fff;">Fluency</strong> mode locks each session to 1 minute and records <strong style="color:#fff;">correct per minute</strong> and <strong style="color:#fff;">errors per minute</strong> after every session, displayed on a semi-log chart (Precision Teaching style) so you can see both speed and accuracy trends over time.
+        Each student has a <strong style="color:#fff;">Practice Goal</strong> toggle on their dashboard. <strong style="color:#fff;">Accuracy</strong> mode uses a teacher-chosen session length and tracks correct/incorrect. <strong style="color:#fff;">Fluency</strong> mode locks each session to 1 minute and records <strong style="color:#fff;">correct per minute</strong> and <strong style="color:#fff;">errors per minute</strong> after every session, displayed on a semi-log chart (Precision Teaching style) so you can see both speed and accuracy trends over time. Phase I (Imagery) always uses Accuracy mode, so the toggle appears starting in Phase II.
       </p>
 
       <h3 style="font-family:'Teachers',sans-serif;font-size:.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:#9b6dff;margin:0 0 8px;">Letter sets &amp; points</h3>
