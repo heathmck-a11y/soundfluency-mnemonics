@@ -3100,6 +3100,9 @@
 
     function startIdleTimer() {
       clearIdleTimer();
+      // Phase I (Imagery) is untimed: no automatic clue card
+      const _st = currentStudent();
+      if (_st && (_st.level || 1) === 1) return;
       _idleTimer = setTimeout(() => {
         const letter = state.session.queue[state.session.cardIndex];
         const phase = (currentStudent().level || 1);
