@@ -97,6 +97,12 @@
     .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(30,157,200,.2); }
     .student-left  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1313; }
+    .backup-section { margin: 18px auto 0; padding: 14px 16px; background: #fff; border-radius: 14px; max-width: 520px; text-align: center; }
+    .backup-label { font-size: .85rem; font-weight: 800; color: #475569; margin-bottom: 10px; }
+    .backup-buttons { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; }
+    .btn-backup { font: inherit; font-size: .9rem; font-weight: 700; padding: 8px 14px; border-radius: 10px; border: 2px solid #2e7d4f; background: #2e7d4f; color: #fff; cursor: pointer; }
+    .btn-restore { background: #fff; color: #2e7d4f; }
+    .backup-status { font-size: .78rem; color: #64748b; margin-top: 8px; }
     .student-mastered { font-size: .85rem; font-weight: 700; color: #2e7d4f; margin-left: 8px; }
     .level-badge { font-size: .7rem; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: .05em; margin-top: 2px; display: inline-block; }
     .level-badge-1 { background: #e6f4fc; color: #1e9dc8; }
@@ -1138,6 +1144,17 @@
       </div>
       <ul id="student-list" class="student-list"></ul>
     </section>
+
+    <!-- Backup section -->
+    <div class="backup-section">
+      <div class="backup-label">💾 Backup</div>
+      <div class="backup-buttons">
+        <button class="btn-backup" onclick="downloadBackup()">⬇ Download backup</button>
+        <button class="btn-backup btn-restore" onclick="document.getElementById('inp-restore').click()">⬆ Restore from backup</button>
+        <input id="inp-restore" type="file" accept=".json,application/json" style="display:none" onchange="restoreBackup(this)" />
+      </div>
+      <div id="backup-status" class="backup-status"></div>
+    </div>
 
     <!-- QR Code section -->
     <div class="qr-section">
@@ -3541,9 +3558,72 @@
     }
 
     // ========================================================
+    // BACKUP - download / restore a .json file
+    // ========================================================
+    const BACKUP_DATE_KEY = 'letterSounds_lastBackup';
+
+    function renderBackupStatus() {
+      const el = document.getElementById('backup-status');
+      if (!el) return;
+      let last = null;
+      try { last = localStorage.getItem(BACKUP_DATE_KEY); } catch(e) {}
+      el.textContent = last
+        ? 'Last backup downloaded: ' + new Date(last).toLocaleDateString()
+        : 'No backup downloaded on this device yet.';
+    }
+
+    function downloadBackup() {
+      let letterOrder = null;
+      try { letterOrder = JSON.parse(localStorage.getItem('letterSounds_letterOrder')); } catch(e) {}
+      const data = {
+        app: 'soundfluency-mnemonics',
+        version: 1,
+        savedAt: new Date().toISOString(),
+        students: state.students,
+        letterOrder: letterOrder
+      };
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+      const url  = URL.createObjectURL(blob);
+      const a    = document.createElement('a');
+      const d    = new Date();
+      const stamp = d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+      a.href = url;
+      a.download = 'letter-sounds-backup-' + stamp + '.json';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+      try { localStorage.setItem(BACKUP_DATE_KEY, d.toISOString()); } catch(e) {}
+      renderBackupStatus();
+      toast('Backup downloaded', 'green');
+    }
+
+    function restoreBackup(input) {
+      const file = input.files && input.files[0];
+      input.value = '';
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = () => {
+        let data;
+        try { data = JSON.parse(reader.result); } catch(e) { alert('That file could not be read as a backup.'); return; }
+        if (!data || !Array.isArray(data.students)) { alert('That file does not look like a Letter Sounds backup.'); return; }
+        const when = data.savedAt ? new Date(data.savedAt).toLocaleDateString() : 'an unknown date';
+        const ok = confirm('Restore ' + data.students.length + ' student(s) from the backup saved ' + when + '?\n\nThis replaces all students currently on this device.');
+        if (!ok) return;
+        try {
+          localStorage.setItem(STORE, JSON.stringify({ students: data.students }));
+          if (Array.isArray(data.letterOrder)) localStorage.setItem('letterSounds_letterOrder', JSON.stringify(data.letterOrder));
+        } catch(e) { alert('Restore failed: could not save to this browser.'); return; }
+        location.reload();
+      };
+      reader.readAsText(file);
+    }
+
+    // ========================================================
     // BOOT
     // ========================================================
     loadState();
+    renderBackupStatus();
     renderQrCode();
     showHome();
 
