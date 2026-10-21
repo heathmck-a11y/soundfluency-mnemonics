@@ -97,6 +97,7 @@
     .student-item:hover { border-color: var(--accent); box-shadow: 0 4px 16px rgba(30,157,200,.2); }
     .student-left  { display: flex; flex-direction: column; gap: 4px; flex: 1; }
     .student-name  { font-size: 1.15rem; font-weight: 500; color: #1a1313; }
+    .student-mastered { font-size: .85rem; font-weight: 700; color: #2e7d4f; margin-left: 8px; }
     .level-badge { font-size: .7rem; font-weight: 800; padding: 2px 9px; border-radius: 100px; letter-spacing: .05em; margin-top: 2px; display: inline-block; }
     .level-badge-1 { background: #e6f4fc; color: #1e9dc8; }
     .level-badge-2 { background: #e6f4fc; color: #1e9dc8; }
@@ -1672,7 +1673,7 @@
         li.className = 'student-item';
         li.innerHTML = `
           <div class="student-left" onclick="selectStudent('${student.id}')">
-            <span class="student-name"><span class="student-icon">${student.icon||'⭐'}</span>${escHtml(student.name)}</span>
+            <span class="student-name"><span class="student-icon">${student.icon||'⭐'}</span>${escHtml(student.name)}<span class="student-mastered">${known}/26 mastered</span></span>
             <span class="level-badge level-badge-${student.level||1}">${['Phase I: Imagery','Phase II: Auditory','Phase III: Integration'][(student.level||1)-1]}</span>
 
           </div>
